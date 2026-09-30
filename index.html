@@ -1,294 +1,166 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>Pilates Gestão · Alexsandra Souza</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Pilates Gestão · Alexsandra Souza</title>
+<style>
+    :root {
+        --coral: #f26f54;
+        --coral-soft: #fa8072;
+        --bg: #fff7f5;
+        --cream: #fff0e7;
+        --ink: #2d2d2d;
+        --muted: #b48c7c;
+        --border: #ffe2db;
+        --green: #2e7d64;
+        --green-bg: #e6f7ec;
+        --red: #c23b2b;
+        --red-bg: #ffe6e5;
+        --orange: #c26b3a;
+        --orange-bg: #fff0e7;
+        --safe-bottom: env(safe-area-inset-bottom, 0px);
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; -webkit-tap-highlight-color: transparent; }
+    body { background: var(--bg); display: flex; justify-content: center; align-items: flex-start; min-height: 100vh; color: var(--ink); }
+    #app { max-width: 760px; width: 100%; background: #ffffff; box-shadow: 0 0 30px rgba(250,128,114,.08); min-height: 100vh; display: flex; flex-direction: column; position: relative; }
+    .main-content { flex: 1; padding: 20px 18px calc(96px + var(--safe-bottom)) 18px; background: #fff; }
 
-        body {
-            background: #fff7f5;
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
-            min-height: 100vh;
-        }
+    .prof-header { margin-bottom: 20px; }
+    .prof-header h1 { font-size: 1.55rem; font-weight: 700; color: var(--ink); letter-spacing: -.3px; }
+    .prof-header h1 span { color: var(--coral); }
+    .prof-header p { font-size: .8rem; color: var(--muted); margin-top: 4px; }
 
-        #app {
-            max-width: 500px;
-            width: 100%;
-            background: #ffffff;
-            box-shadow: 0 0 30px rgba(250, 128, 114, 0.08);
-            min-height: 100vh;
-            border-radius: 28px 28px 0 0;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            position: relative;
-        }
+    h2 { font-size: 1.1rem; margin: 22px 0 10px; color: var(--ink); font-weight: 700; border-left: 4px solid var(--coral); padding-left: 12px; display: flex; align-items: center; gap: 8px; }
+    h3 { font-size: 1rem; font-weight: 600; color: #3a2c2a; margin-bottom: 10px; }
 
-        .main-content {
-            flex: 1;
-            padding: 20px 18px 90px 18px;
-            overflow-y: auto;
-            background: #ffffff;
-        }
+    .card { background: #fff; border-radius: 20px; padding: 14px 16px; box-shadow: 0 4px 12px rgba(250,128,114,.07); border: 1px solid var(--border); margin-bottom: 16px; }
+    .text-small { font-size: .78rem; color: var(--muted); }
+    .flex-row { display: flex; align-items: center; gap: 8px; }
+    hr { border: none; border-top: 1px solid var(--border); margin: 10px 0; }
 
-        .prof-header {
-            margin-bottom: 24px;
-        }
-        .prof-header h1 {
-            font-size: 1.7rem;
-            font-weight: 600;
-            color: #2d2d2d;
-            letter-spacing: -0.3px;
-        }
-        .prof-header h1 span {
-            color: #fa8072;
-        }
-        .prof-header p {
-            font-size: 0.8rem;
-            color: #b48c7c;
-            margin-top: 4px;
-        }
+    /* ---- Métricas clicáveis ---- */
+    .resumo-metricas { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 8px; }
+    .metrica-card { background: linear-gradient(160deg, #fff 0%, var(--cream) 100%); border: 1px solid var(--border); border-radius: 18px; padding: 14px 10px 10px; text-align: center; cursor: pointer; transition: transform .12s, box-shadow .12s; position: relative; min-height: 76px; }
+    .metrica-card:active { transform: scale(.97); }
+    .metrica-card .metrica-num { font-size: 1.25rem; font-weight: 700; color: var(--coral); }
+    .metrica-card .metrica-link { display: block; font-size: .62rem; color: var(--coral-soft); margin-top: 3px; font-weight: 600; letter-spacing: .2px; }
 
-        h2 {
-            font-size: 1.2rem;
-            margin: 20px 0 12px 0;
-            color: #2d2d2d;
-            font-weight: 600;
-            border-left: 4px solid #fa8072;
-            padding-left: 12px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
+    /* ---- Linhas de atendimento ---- */
+    .atendimento-linha { display: flex; align-items: center; gap: 10px; padding: 12px 2px; border-bottom: 1px solid var(--border); cursor: pointer; min-height: 52px; }
+    .atendimento-linha:last-child { border-bottom: none; }
+    .horario-badge { background: var(--cream); color: var(--orange); font-weight: 700; font-size: .8rem; border-radius: 10px; padding: 6px 8px; min-width: 52px; text-align: center; flex-shrink: 0; }
+    .info-att { flex: 1; min-width: 0; }
+    .paciente-nome { font-weight: 600; font-size: .9rem; display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .servico-tipo { font-size: .75rem; color: var(--muted); }
+    .badge-status { font-size: .68rem; padding: 4px 10px; border-radius: 30px; font-weight: 600; white-space: nowrap; }
+    .status-agendado { background: var(--orange-bg); color: var(--orange); }
+    .status-realizado { background: var(--green-bg); color: var(--green); }
+    .status-cancelado { background: var(--red-bg); color: var(--red); }
 
-        h3 {
-            font-size: 1rem;
-            font-weight: 600;
-            color: #3a2c2a;
-            margin-bottom: 10px;
-        }
+    /* ---- Botões ---- */
+    button, .btn { background: var(--coral); color: #fff; border: none; border-radius: 14px; padding: 12px 18px; font-size: .88rem; font-weight: 600; cursor: pointer; min-height: 44px; transition: filter .12s, transform .1s; }
+    button:active, .btn:active { transform: scale(.97); filter: brightness(.95); }
+    .btn-outline { background: #fff; color: var(--coral); border: 1.5px solid var(--coral-soft); }
+    .btn-small { padding: 8px 12px; font-size: .78rem; min-height: 38px; border-radius: 10px; }
+    .btn-danger { background: #fff; color: var(--red); border: 1.5px solid #f3b8b2; }
+    .btn-verde { background: var(--green); }
+    .btn-icon { padding: 8px 10px; min-width: 44px; min-height: 44px; border-radius: 12px; background: #fff; border: 1.5px solid var(--border); color: var(--ink); font-size: 1rem; }
 
-        .card {
-            background: #ffffff;
-            border-radius: 24px;
-            padding: 16px;
-            box-shadow: 0 4px 12px rgba(250, 128, 114, 0.08);
-            border: 1px solid #ffe2db;
-            margin-bottom: 20px;
-            transition: all 0.1s;
-        }
+    input, select, textarea { width: 100%; padding: 12px 14px; border: 1.5px solid var(--border); border-radius: 12px; font-size: .9rem; margin: 6px 0; background: #fffdfb; color: var(--ink); min-height: 44px; }
+    input:focus, select:focus, textarea:focus { outline: 2px solid rgba(242,111,84,.35); border-color: var(--coral-soft); }
+    textarea { min-height: 74px; resize: vertical; }
+    label { font-size: .75rem; font-weight: 600; color: var(--muted); display: block; margin-top: 4px; }
 
-        .badge-status {
-            font-size: 0.7rem;
-            padding: 4px 10px;
-            border-radius: 30px;
-            font-weight: 500;
-            background: #fef2ef;
-            color: #b75a4a;
-        }
-        .status-agendado { background: #fff0e7; color: #c26b3a; }
-        .status-realizado { background: #e6f7ec; color: #2e7d64; }
-        .status-cancelado { background: #ffe6e5; color: #c23b2b; }
+    /* ---- Chips de filtro ---- */
+    .chips { display: flex; gap: 8px; overflow-x: auto; padding: 4px 0 10px; scrollbar-width: none; }
+    .chips::-webkit-scrollbar { display: none; }
+    .chip { flex-shrink: 0; border: 1.5px solid var(--border); background: #fff; color: var(--muted); border-radius: 30px; padding: 8px 14px; font-size: .78rem; font-weight: 600; min-height: 38px; cursor: pointer; }
+    .chip.ativo { background: var(--coral); border-color: var(--coral); color: #fff; }
 
-        .atendimento-linha {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 12px 0;
-            border-bottom: 1px solid #ffe2db;
-            cursor: pointer;
-            transition: background 0.1s;
-        }
-        .atendimento-linha:active { background: #fff6f3; }
-        .horario-badge {
-            font-weight: 600;
-            color: #fa8072;
-            width: 70px;
-            font-size: 0.9rem;
-        }
-        .info-att {
-            flex: 1;
-            margin-left: 8px;
-        }
-        .paciente-nome {
-            font-weight: 600;
-            color: #2c2c2c;
-        }
-        .servico-tipo {
-            font-size: 0.7rem;
-            color: #b87a6a;
-        }
-        .valor-info {
-            font-size: 0.7rem;
-            font-weight: 500;
-            color: #4a9e7a;
-        }
-        .flex-row {
-            display: flex;
-            gap: 8px;
-            align-items: center;
-            flex-wrap: wrap;
-        }
-        button, .btn-like {
-            background: #fa8072;
-            color: white;
-            border: none;
-            border-radius: 40px;
-            padding: 10px 18px;
-            font-weight: 500;
-            font-size: 0.85rem;
-            cursor: pointer;
-            transition: 0.1s;
-        }
-        .btn-outline {
-            background: white;
-            border: 1px solid #fa8072;
-            color: #fa8072;
-            box-shadow: none;
-        }
-        .btn-outline:hover, .btn-outline:active { background: #fff4f2; }
-        .btn-small { padding: 6px 12px; font-size: 0.75rem; }
+    /* ---- Calendário ---- */
+    .calendario-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; gap: 8px; }
+    .calendario-header button { min-width: 44px; }
+    .calendario-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; margin-bottom: 14px; }
+    .dia-nome { text-align: center; font-size: .68rem; font-weight: 700; color: var(--muted); padding: 6px 0; }
+    .dia-num { text-align: center; padding: 9px 0 6px; border-radius: 12px; font-size: .85rem; cursor: pointer; min-height: 44px; position: relative; font-weight: 500; }
+    .dia-num .dot { display: block; width: 5px; height: 5px; border-radius: 50%; background: var(--coral); margin: 2px auto 0; }
+    .dia-num.selecionado { background: var(--coral); color: #fff; font-weight: 700; }
+    .dia-num.selecionado .dot { background: #fff; }
+    .dia-num.hoje { box-shadow: inset 0 0 0 1.5px var(--coral-soft); }
 
-        .tab-bar {
-            position: fixed;
-            bottom: 0;
-            max-width: 500px;
-            width: 100%;
-            background: white;
-            display: flex;
-            justify-content: space-around;
-            padding: 10px 8px 20px;
-            border-top: 1px solid #ffe2db;
-            border-radius: 28px 28px 0 0;
-            background: #ffffff;
-            z-index: 10;
-        }
-        .tab-item {
-            text-align: center;
-            font-size: 0.7rem;
-            color: #c2a095;
-            cursor: pointer;
-            flex: 1;
-            font-weight: 500;
-        }
-        .tab-item.active { color: #fa8072; }
-        .tab-item i { font-size: 1.5rem; display: block; margin-bottom: 2px; font-style: normal; }
+    /* ---- Grade semanal estilo agenda ---- */
+    .semana-scroll { overflow-x: auto; border: 1px solid var(--border); border-radius: 16px; margin-bottom: 14px; position: relative; }
+    .semana-grid { display: grid; grid-template-columns: 46px repeat(6, minmax(96px, 1fr)); min-width: 640px; position: relative; }
+    .semana-grid .hora-label { font-size: .62rem; color: var(--muted); text-align: right; padding-right: 6px; height: 44px; transform: translateY(-6px); background: #fff; }
+    .semana-grid .celula { border-left: 1px solid #fdeee8; border-bottom: 1px solid #fdf1ec; height: 44px; position: relative; }
+    .semana-grid .dia-cab { position: sticky; top: 0; background: #fff; z-index: 3; text-align: center; font-size: .72rem; font-weight: 700; color: var(--ink); height: 50px; display: flex; flex-direction: column; align-items: center; justify-content: center; border-bottom: 2px solid var(--border); border-left: 1px solid #fdeee8; }
+    .semana-grid .dia-cab.hoje { color: var(--coral); }
+    .col-overlay { position: absolute; top: 50px; bottom: 0; z-index: 2; pointer-events: none; }
+    .evt { position: absolute; left: 2px; right: 2px; border-radius: 8px; padding: 3px 6px; font-size: .62rem; font-weight: 600; overflow: hidden; cursor: pointer; line-height: 1.25; border-left: 3px solid; pointer-events: auto; }
+    .evt small { display: block; font-weight: 400; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .evt.agendado { background: var(--orange-bg); color: var(--orange); border-color: var(--orange); }
+    .evt.realizado { background: var(--green-bg); color: var(--green); border-color: var(--green); }
+    .evt.cancelado { background: var(--red-bg); color: var(--red); border-color: var(--red); text-decoration: line-through; }
 
-        .calendario-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin: 0 0 15px 0;
-        }
-        .calendario-grid {
-            display: grid;
-            grid-template-columns: repeat(7, 1fr);
-            gap: 6px;
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        .dia-nome { font-size: 0.7rem; color: #cc9b8b; padding: 6px 0; font-weight: 500; }
-        .dia-num {
-            background: #fffaf8;
-            border-radius: 40px;
-            padding: 8px 0;
-            font-size: 0.85rem;
-            cursor: pointer;
-            transition: 0.05s linear;
-        }
-        .dia-num.selecionado { background: #fa8072; color: white; font-weight: 500; }
-        .dia-num.hoje { border: 2px solid #fa8072; background: #fff1ed; font-weight: 600; }
+    /* ---- Modal ---- */
+    .modal-overlay { position: fixed; inset: 0; background: rgba(45,32,28,.45); display: flex; align-items: flex-end; justify-content: center; z-index: 100; padding: 0; }
+    .modal-card { background: #fff; border-radius: 24px 24px 0 0; padding: 22px 20px calc(22px + var(--safe-bottom)); width: 100%; max-width: 560px; max-height: 92vh; overflow-y: auto; animation: sobe .22s ease-out; }
+    @keyframes sobe { from { transform: translateY(40px); opacity: .6; } to { transform: translateY(0); opacity: 1; } }
+    @media (min-width: 640px) { .modal-overlay { align-items: center; padding: 20px; } .modal-card { border-radius: 24px; } }
+    .modal-card h3 { margin-bottom: 12px; }
+    .modal-acoes { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 14px; }
+    .modal-acoes button { flex: 1; min-width: 120px; }
 
-        .modal-overlay {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: rgba(0,0,0,0.3);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 30;
-        }
-        .modal-card {
-            background: white;
-            max-width: 380px;
-            width: 90%;
-            border-radius: 32px;
-            padding: 24px;
-            box-shadow: 0 20px 35px rgba(0,0,0,0.1);
-            max-height: 80vh;
-            overflow-y: auto;
-        }
-        input, select, textarea {
-            width: 100%;
-            padding: 12px 14px;
-            border: 1px solid #ffe2db;
-            border-radius: 28px;
-            margin-bottom: 12px;
-            font-size: 0.9rem;
-            background: white;
-        }
-        input:focus, select:focus, textarea:focus { outline: none; border-color: #fa8072; }
+    /* ---- Barra de abas ---- */
+    .tab-bar { position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 760px; background: rgba(255,255,255,.97); backdrop-filter: blur(8px); border-top: 1px solid var(--border); display: flex; overflow-x: auto; padding: 6px 6px calc(6px + var(--safe-bottom)); scrollbar-width: none; z-index: 50; }
+    .tab-bar::-webkit-scrollbar { display: none; }
+    .tab-item { flex: 1 0 auto; min-width: 68px; text-align: center; font-size: .62rem; color: var(--muted); cursor: pointer; padding: 6px 4px; border-radius: 12px; font-weight: 600; min-height: 48px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; }
+    .tab-item i { font-style: normal; font-size: 1.15rem; }
+    .tab-item.active { color: var(--coral); background: var(--cream); }
 
-        .resumo-metricas {
-            display: flex;
-            justify-content: space-between;
-            gap: 12px;
-            margin-bottom: 20px;
-        }
-        .metrica-card {
-            flex: 1;
-            text-align: center;
-            padding: 12px 5px;
-            border-radius: 28px;
-            background: #fffaf8;
-            border: 1px solid #ffe2db;
-        }
-        .metrica-num {
-            font-size: 1.7rem;
-            font-weight: 700;
-            color: #fa8072;
-        }
-        .valor-liquido {
-            font-size: 0.9rem;
-            font-weight: bold;
-            color: #2b7a62;
-        }
-        hr { margin: 8px 0; border-color: #ffe2db; }
-        .text-small { font-size: 0.75rem; color: #b28472; }
-        .btn-pdf {
-            background: #dc6b5c;
-        }
-        .tag-financeiro {
-            background: #fff0e7;
-            border-radius: 30px;
-            padding: 2px 8px;
-            font-size: 0.65rem;
-            color: #c26b3a;
-        }
-        @media print {
-            body * { visibility: hidden; }
-            #relatorio-print-area, #relatorio-print-area * { visibility: visible; }
-            #relatorio-print-area { position: absolute; top: 0; left: 0; width: 100%; padding: 20px; }
-            .tab-bar, .btn-pdf, .modal-overlay { display: none; }
-        }
-    </style>
+    /* ---- Tabela relatório ---- */
+    table { width: 100%; border-collapse: collapse; font-size: .78rem; }
+    th { text-align: left; padding: 8px 6px; color: var(--muted); font-size: .68rem; text-transform: uppercase; letter-spacing: .4px; border-bottom: 2px solid var(--border); }
+    td { padding: 8px 6px; border-bottom: 1px solid #fdf1ec; vertical-align: top; }
+    .tabela-scroll { overflow-x: auto; }
+    .valor-riscado { text-decoration: line-through; color: var(--muted); }
+    .resumo-relatorio { background: linear-gradient(160deg, #fff 0%, var(--cream) 100%); border: 1px solid var(--border); border-radius: 16px; padding: 14px 16px; margin-bottom: 14px; }
+    .resumo-relatorio .linha { display: flex; justify-content: space-between; padding: 5px 0; font-size: .85rem; }
+    .resumo-relatorio .linha.destaque { font-weight: 700; font-size: 1rem; color: var(--green); border-top: 1.5px dashed var(--border); margin-top: 6px; padding-top: 10px; }
+    .aviso-previsto { background: var(--orange-bg); border-radius: 12px; padding: 10px 12px; font-size: .76rem; color: var(--orange); margin-top: 8px; }
+
+    /* ---- Agenda compartilhada (somente leitura) ---- */
+    #shareView { max-width: 720px; margin: 0 auto; padding: 24px 16px 60px; background: #fff; min-height: 100vh; }
+    .share-header { text-align: center; margin-bottom: 20px; }
+    .share-header .marca { display: inline-block; background: var(--coral); color: #fff; border-radius: 30px; padding: 6px 16px; font-size: .72rem; font-weight: 700; letter-spacing: .6px; text-transform: uppercase; margin-bottom: 10px; }
+    .share-header h1 { font-size: 1.4rem; }
+    .share-header p { color: var(--muted); font-size: .82rem; margin-top: 4px; }
+    .dia-share { border: 1px solid var(--border); border-radius: 16px; margin-bottom: 10px; overflow: hidden; }
+    .dia-share .dia-titulo { background: var(--cream); padding: 10px 14px; font-weight: 700; font-size: .88rem; display: flex; justify-content: space-between; }
+    .dia-share .dia-titulo .qtd { color: var(--coral); font-size: .76rem; }
+    .dia-share .item { display: flex; gap: 10px; align-items: center; padding: 10px 14px; border-top: 1px solid #fdf1ec; font-size: .85rem; }
+    .dia-share .item .hora { font-weight: 700; color: var(--coral); min-width: 46px; }
+    .dia-share .vazio { padding: 12px 14px; font-size: .78rem; color: var(--muted); border-top: 1px solid #fdf1ec; }
+    .share-footer { text-align: center; margin-top: 24px; font-size: .7rem; color: var(--muted); }
+
+    .empty-state { text-align: center; padding: 28px 10px; color: var(--muted); font-size: .82rem; }
+
+    @media print {
+        body * { visibility: hidden; }
+        #relatorio-print-area, #relatorio-print-area * { visibility: visible; }
+        #relatorio-print-area { position: absolute; top: 0; left: 0; width: 100%; padding: 20px; }
+    }
+</style>
 </head>
 <body>
 <div id="app">
     <div class="main-content" id="mainContent"></div>
-    <div class="tab-bar">
+    <div class="tab-bar" id="tabBar">
         <div class="tab-item" data-aba="dashboard"><i>📋</i>Painel</div>
+        <div class="tab-item" data-aba="atendimentos"><i>🔎</i>Atendim.</div>
         <div class="tab-item" data-aba="calendario"><i>📅</i>Agenda</div>
+        <div class="tab-item" data-aba="semana"><i>🗓️</i>Semana</div>
         <div class="tab-item" data-aba="pacientes"><i>👤</i>Pacientes</div>
         <div class="tab-item" data-aba="servicos"><i>⚙️</i>Serviços</div>
         <div class="tab-item" data-aba="financeiro"><i>💰</i>Financeiro</div>
@@ -297,317 +169,649 @@
 </div>
 
 <script>
-    (function(){
-        // ========== DADOS ===========
-        let pacientes = JSON.parse(localStorage.getItem('pilates_pacientes')) || [];
-        let servicos = JSON.parse(localStorage.getItem('pilates_servicos')) || [
-            { id: 's1', nome: 'Pilates', valorPadrao: 90.00, porcentagemProfissional: 60, porcentagemClinica: 40 },
-            { id: 's2', nome: 'Massagem', valorPadrao: 120.00, porcentagemProfissional: 70, porcentagemClinica: 30 },
-            { id: 's3', nome: 'Liberação Miofascial', valorPadrao: 110.00, porcentagemProfissional: 65, porcentagemClinica: 35 },
-            { id: 's4', nome: 'Fisioterapia', valorPadrao: 130.00, porcentagemProfissional: 60, porcentagemClinica: 40 },
-            { id: 's5', nome: 'Particular', valorPadrao: 150.00, porcentagemProfissional: 85, porcentagemClinica: 15 }
-        ];
-        
-        let atendimentos = JSON.parse(localStorage.getItem('pilates_atendimentos')) || [];
+(function(){
+    // ========== MODO SOMENTE LEITURA (link da secretária) ==========
+    const hash = location.hash || '';
+    if (hash.startsWith('#/semana')) { renderShareView(hash); return; }
 
-        function salvarTudo() {
-            localStorage.setItem('pilates_pacientes', JSON.stringify(pacientes));
-            localStorage.setItem('pilates_servicos', JSON.stringify(servicos));
-            localStorage.setItem('pilates_atendimentos', JSON.stringify(atendimentos));
+    // ========== DADOS ==========
+    let pacientes = JSON.parse(localStorage.getItem('pilates_pacientes')) || [];
+    let servicos = JSON.parse(localStorage.getItem('pilates_servicos')) || [
+        { id: 's1', nome: 'Pilates', valorPadrao: 90.00, porcentagemProfissional: 60, porcentagemClinica: 40 },
+        { id: 's2', nome: 'Massagem', valorPadrao: 120.00, porcentagemProfissional: 70, porcentagemClinica: 30 },
+        { id: 's3', nome: 'Liberação Miofascial', valorPadrao: 110.00, porcentagemProfissional: 65, porcentagemClinica: 35 },
+        { id: 's4', nome: 'Fisioterapia', valorPadrao: 130.00, porcentagemProfissional: 60, porcentagemClinica: 40 },
+        { id: 's5', nome: 'Particular', valorPadrao: 150.00, porcentagemProfissional: 85, porcentagemClinica: 15 }
+    ];
+    let atendimentos = JSON.parse(localStorage.getItem('pilates_atendimentos')) || [];
+
+    function salvarTudo() {
+        localStorage.setItem('pilates_pacientes', JSON.stringify(pacientes));
+        localStorage.setItem('pilates_servicos', JSON.stringify(servicos));
+        localStorage.setItem('pilates_atendimentos', JSON.stringify(atendimentos));
+    }
+
+    // Migração: garante valores coerentes em registros antigos
+    atendimentos.forEach(a => {
+        a.valorTotal = a.valorTotal || 0;
+        a.porcentagemProfissional = a.porcentagemProfissional || 0;
+        a.valorLiquidoProfissional = (a.valorTotal * a.porcentagemProfissional) / 100;
+        a.valorLiquidoClinica = a.valorTotal - a.valorLiquidoProfissional;
+        a.porcentagemClinica = 100 - a.porcentagemProfissional;
+    });
+
+    // ========== HELPERS ==========
+    const pad = n => String(n).padStart(2,'0');
+    const hojeStr = () => { const d = new Date(); return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`; };
+    const isoDe = d => `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+    const formatarDataBr = iso => iso.split('-').reverse().join('/');
+    const formatarMoeda = v => 'R$ ' + (v||0).toFixed(2).replace('.', ',');
+    const esc = s => String(s||'').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    const calcularValoresLiquidos = (total, perc) => { const l = (total*perc)/100; return { liquidoProf: l, liquidoClinica: total - l }; };
+    const nomeDiaSemana = ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
+    const segundaDaSemana = d => { const x = new Date(d); const dow = (x.getDay()+6)%7; x.setDate(x.getDate()-dow); x.setHours(0,0,0,0); return x; };
+    const statusLabel = s => s === 'realizado' ? 'Realizado' : s === 'cancelado' ? 'Cancelado' : 'Agendado';
+    // Só REALIZADO gera valor. Agendado/cancelado nunca somam nos totais.
+    const somaLiq = lista => lista.filter(a => a.status === 'realizado').reduce((acc,a) => acc + (a.valorLiquidoProfissional||0), 0);
+
+    // ========== ESTADO ==========
+    let abaAtiva = 'dashboard';
+    let calendarioAno = new Date().getFullYear();
+    let calendarioMes = new Date().getMonth();
+    let dataSelecionada = hojeStr();
+    let semanaBase = segundaDaSemana(new Date());
+    let buscaAtend = '';
+    let filtroStatusAtend = 'todos';
+    let filtroDe = '', filtroAte = '';
+
+    const mainEl = document.getElementById('mainContent');
+    const tabs = document.querySelectorAll('.tab-item');
+
+    function irParaAba(aba) { abaAtiva = aba; render(); window.scrollTo(0,0); }
+
+    function render() {
+        let html = `<div class="prof-header"><h1>Dra. <span>Alexsandra Souza</span></h1><p>Pilates · Gestão completa</p></div>`;
+        if (abaAtiva === 'dashboard') html += renderDashboard();
+        else if (abaAtiva === 'atendimentos') html += renderAtendimentos();
+        else if (abaAtiva === 'calendario') html += renderCalendario();
+        else if (abaAtiva === 'semana') html += renderSemana(false);
+        else if (abaAtiva === 'pacientes') html += renderPacientes();
+        else if (abaAtiva === 'servicos') html += renderServicos();
+        else if (abaAtiva === 'financeiro') html += renderFinanceiro();
+        else if (abaAtiva === 'relatorios') html += renderRelatorios();
+        mainEl.innerHTML = html;
+        tabs.forEach(t => t.classList.toggle('active', t.dataset.aba === abaAtiva));
+        if (abaAtiva === 'dashboard') hookDashboard();
+        else if (abaAtiva === 'atendimentos') hookAtendimentos();
+        else if (abaAtiva === 'calendario') hookCalendario();
+        else if (abaAtiva === 'semana') hookSemana();
+        else if (abaAtiva === 'pacientes') hookPacientes();
+        else if (abaAtiva === 'servicos') hookServicos();
+        else if (abaAtiva === 'relatorios') hookRelatorios();
+    }
+
+    // ========== DASHBOARD ==========
+    function renderAtendimentoLinha(att, clicavel) {
+        const sc = att.status === 'realizado' ? 'status-realizado' : att.status === 'cancelado' ? 'status-cancelado' : 'status-agendado';
+        const valor = att.status === 'cancelado'
+            ? `<span class="valor-riscado">${formatarMoeda(att.valorTotal)}</span>`
+            : (att.valorTotal ? formatarMoeda(att.valorTotal) : '');
+        return `<div class="atendimento-linha" data-id="${att.id}" ${clicavel === false ? 'style="cursor:default"' : ''}>
+            <span class="horario-badge">${esc(att.horario)}</span>
+            <div class="info-att"><span class="paciente-nome">${esc(att.pacienteNome)}</span><div class="servico-tipo">${esc(att.servicoNome)} · ${valor}</div></div>
+            <span class="badge-status ${sc}">${statusLabel(att.status)}</span>
+        </div>`;
+    }
+
+    function renderDashboard() {
+        const hoje = hojeStr();
+        const amanha = new Date(); amanha.setDate(amanha.getDate()+1);
+        const amanhaStr = isoDe(amanha);
+        const proximos7 = [];
+        for (let i = 1; i <= 7; i++) { const d = new Date(); d.setDate(d.getDate()+i); proximos7.push(isoDe(d)); }
+        const attHoje = atendimentos.filter(a => a.data === hoje && a.status !== 'cancelado').sort((a,b)=>a.horario.localeCompare(b.horario));
+        const attAmanha = atendimentos.filter(a => a.data === amanhaStr && a.status !== 'cancelado').sort((a,b)=>a.horario.localeCompare(b.horario));
+        const attProx = atendimentos.filter(a => proximos7.includes(a.data) && a.status !== 'cancelado').sort((a,b)=>a.data.localeCompare(b.data)||a.horario.localeCompare(b.horario));
+        const mesAtual = hoje.slice(0,7);
+        const attMesReal = atendimentos.filter(a => a.data.startsWith(mesAtual) && a.status === 'realizado');
+        const servicoCount = {};
+        attMesReal.forEach(a => { servicoCount[a.servicoNome] = (servicoCount[a.servicoNome]||0) + 1; });
+        return `
+        <div class="resumo-metricas">
+            <div class="metrica-card" data-go="realizados"><div class="metrica-num">${attMesReal.length}</div><div class="text-small">Atend. realizados</div><span class="metrica-link">TOQUE PARA VER ▸</span></div>
+            <div class="metrica-card" data-go="hoje"><div class="metrica-num">${attHoje.length}</div><div class="text-small">Hoje</div><span class="metrica-link">VER DIA ▸</span></div>
+            <div class="metrica-card" data-go="financeiro"><div class="metrica-num">${formatarMoeda(somaLiq(attMesReal))}</div><div class="text-small">Líquido mês</div><span class="metrica-link">DETALHES ▸</span></div>
+        </div>
+        <h2>📌 Hoje · ${formatarDataBr(hoje)}</h2>
+        <div class="card">${attHoje.length ? attHoje.map(a=>renderAtendimentoLinha(a)).join('') : '<div class="empty-state">Nenhum atendimento hoje</div>'}</div>
+        <h2>📅 Amanhã · ${formatarDataBr(amanhaStr)}</h2>
+        <div class="card">${attAmanha.length ? attAmanha.map(a=>renderAtendimentoLinha(a)).join('') : '<div class="empty-state">Nenhum agendamento</div>'}</div>
+        <h2>🗓️ Próximos 7 dias</h2>
+        <div class="card">${attProx.length ? attProx.slice(0,10).map(a=>renderAtendimentoLinha(a)).join('') : '<div class="empty-state">Sem atendimentos futuros</div>'}</div>
+        <h2>📊 Produtividade mensal (realizados)</h2>
+        <div class="card">${Object.entries(servicoCount).map(([s,q])=>`<div class="flex-row" style="justify-content:space-between;padding:4px 0"><strong>${esc(s)}</strong><span>${q}</span></div>`).join('') || '<div class="empty-state">Nada realizado neste mês ainda</div>'}<hr>
+        <div class="flex-row" style="justify-content:space-between"><strong>Total realizados</strong><strong>${attMesReal.length}</strong></div>
+        <div class="flex-row" style="justify-content:space-between"><span>💰 Líquido recebido</span><strong>${formatarMoeda(somaLiq(attMesReal))}</strong></div></div>`;
+    }
+
+    function hookDashboard() {
+        document.querySelectorAll('.metrica-card').forEach(el => el.addEventListener('click', () => {
+            const go = el.dataset.go;
+            if (go === 'realizados') { filtroStatusAtend = 'realizado'; buscaAtend = ''; irParaAba('atendimentos'); }
+            else if (go === 'hoje') { dataSelecionada = hojeStr(); calendarioAno = new Date().getFullYear(); calendarioMes = new Date().getMonth(); irParaAba('calendario'); }
+            else if (go === 'financeiro') irParaAba('financeiro');
+        }));
+        document.querySelectorAll('.atendimento-linha[data-id]').forEach(el => el.addEventListener('click', () => abrirDetalhe(el.dataset.id)));
+    }
+
+    // ========== ABA ATENDIMENTOS (busca / editar / excluir) ==========
+    function filtrarAtendimentos() {
+        let lista = [...atendimentos];
+        if (buscaAtend) {
+            const t = buscaAtend.toLowerCase();
+            lista = lista.filter(a => (a.pacienteNome||'').toLowerCase().includes(t) || (a.servicoNome||'').toLowerCase().includes(t) || a.data.includes(t) || (a.obs||'').toLowerCase().includes(t));
         }
+        if (filtroStatusAtend !== 'todos') lista = lista.filter(a => a.status === filtroStatusAtend);
+        if (filtroDe) lista = lista.filter(a => a.data >= filtroDe);
+        if (filtroAte) lista = lista.filter(a => a.data <= filtroAte);
+        lista.sort((a,b)=> b.data.localeCompare(a.data) || b.horario.localeCompare(a.horario));
+        return lista;
+    }
 
-        const hojeStr = () => new Date().toISOString().slice(0,10);
-        const formatarDataBr = (dataISO) => dataISO.split('-').reverse().join('/');
-        const formatarMoeda = (valor) => 'R$ ' + valor.toFixed(2).replace('.', ',');
+    function renderAtendimentos() {
+        const chips = [['todos','Todos'],['realizado','Realizados'],['agendado','Agendados'],['cancelado','Cancelados']]
+            .map(([v,l]) => `<button class="chip ${filtroStatusAtend===v?'ativo':''}" data-status="${v}">${l}</button>`).join('');
+        return `
+        <h2>🔎 Atendimentos</h2>
+        <input type="search" id="buscaAtend" placeholder="Buscar por paciente, serviço, data (AAAA-MM-DD)..." value="${esc(buscaAtend)}">
+        <div class="chips">${chips}</div>
+        <div class="flex-row" style="gap:8px;flex-wrap:wrap;margin-bottom:10px">
+            <div style="flex:1;min-width:130px"><label>De</label><input type="date" id="filtroDe" value="${filtroDe}"></div>
+            <div style="flex:1;min-width:130px"><label>Até</label><input type="date" id="filtroAte" value="${filtroAte}"></div>
+        </div>
+        <button id="btnNovoAttLista" style="width:100%;margin-bottom:12px">+ Novo atendimento</button>
+        <div id="resultadoAtend"></div>`;
+    }
 
-        let abaAtiva = 'dashboard';
-        let calendarioAno = new Date().getFullYear();
-        let calendarioMes = new Date().getMonth();
-        let dataSelecionada = hojeStr();
-        let visualizacaoCalendario = 'dia';
-
-        const mainEl = document.getElementById('mainContent');
-        const tabs = document.querySelectorAll('.tab-item');
-
-        function render() {
-            let html = `<div class="prof-header"><h1>Dra. <span>Alexsandra Souza</span></h1><p>Pilates · Gestão completa</p></div>`;
-            if (abaAtiva === 'dashboard') html += renderDashboard();
-            else if (abaAtiva === 'calendario') html += renderCalendarioCompleto();
-            else if (abaAtiva === 'pacientes') html += renderPacientes();
-            else if (abaAtiva === 'servicos') html += renderServicos();
-            else if (abaAtiva === 'financeiro') html += renderFinanceiro();
-            else if (abaAtiva === 'relatorios') html += renderRelatorios();
-
-            mainEl.innerHTML = html;
-            tabs.forEach(t => t.classList.toggle('active', t.dataset.aba === abaAtiva));
-
-            if (abaAtiva === 'dashboard') hookDashboard();
-            else if (abaAtiva === 'calendario') hookCalendario();
-            else if (abaAtiva === 'pacientes') hookPacientes();
-            else if (abaAtiva === 'servicos') hookServicos();
-            else if (abaAtiva === 'financeiro') hookFinanceiro();
-            else if (abaAtiva === 'relatorios') hookRelatorios();
-        }
-
-        // ========== DASHBOARD ==========
-        function renderDashboard() {
-            const hoje = hojeStr();
-            const amanha = new Date(new Date().setDate(new Date().getDate() + 1)).toISOString().slice(0,10);
-            const proximos7 = [];
-            const hj = new Date();
-            for (let i = 1; i <= 7; i++) { let d = new Date(hj); d.setDate(hj.getDate() + i); proximos7.push(d.toISOString().slice(0,10)); }
-
-            const atendimentosHoje = atendimentos.filter(a => a.data === hoje).sort((a,b)=> a.horario.localeCompare(b.horario));
-            const amanhaAtend = atendimentos.filter(a => a.data === amanha).sort((a,b)=> a.horario.localeCompare(b.horario));
-            const proximosAtend = atendimentos.filter(a => proximos7.includes(a.data) && a.status !== 'cancelado').sort((a,b)=> a.data.localeCompare(b.data) || a.horario.localeCompare(b.horario));
-
-            const mesAtual = hoje.slice(0,7);
-            const atendimentosMes = atendimentos.filter(a => a.data.startsWith(mesAtual) && a.status === 'realizado');
-            const servicoCount = {};
-            atendimentosMes.forEach(att => { servicoCount[att.servicoNome] = (servicoCount[att.servicoNome] || 0) + 1; });
-            const totalMes = atendimentosMes.length;
-            const totalLiquidoMes = atendimentosMes.reduce((acc, a) => acc + (a.valorLiquidoProfissional || 0), 0);
-
-            return `
-                <div class="resumo-metricas">
-                    <div class="metrica-card"><div class="metrica-num">${totalMes}</div><div class="text-small">Atend. realizados</div></div>
-                    <div class="metrica-card"><div class="metrica-num">${atendimentosHoje.length}</div><div class="text-small">Hoje</div></div>
-                    <div class="metrica-card"><div class="metrica-num">${formatarMoeda(totalLiquidoMes)}</div><div class="text-small">Líquido mês</div></div>
+    function renderResultadoAtend() {
+        const lista = filtrarAtendimentos();
+        const el = document.getElementById('resultadoAtend');
+        if (!el) return;
+        if (!lista.length) { el.innerHTML = '<div class="card"><div class="empty-state">Nenhum atendimento encontrado com esses filtros.</div></div>'; return; }
+        const totalLiq = somaLiq(lista);
+        el.innerHTML = `<div class="card"><div class="flex-row" style="justify-content:space-between;margin-bottom:6px"><span class="text-small">${lista.length} atendimento(s)</span><strong style="color:var(--green)">Líquido (realizados): ${formatarMoeda(totalLiq)}</strong></div><hr>` +
+        lista.map(a => `
+            <div class="atendimento-linha" data-id="${a.id}">
+                <div style="min-width:60px;text-align:center"><div style="font-weight:700;font-size:.72rem;color:var(--coral)">${formatarDataBr(a.data)}</div><div class="horario-badge" style="margin-top:3px">${esc(a.horario)}</div></div>
+                <div class="info-att"><span class="paciente-nome">${esc(a.pacienteNome)}</span><div class="servico-tipo">${esc(a.servicoNome)} · ${a.status==='cancelado' ? '<span class="valor-riscado">'+formatarMoeda(a.valorTotal)+'</span>' : formatarMoeda(a.valorTotal)}</div><span class="badge-status ${a.status==='realizado'?'status-realizado':a.status==='cancelado'?'status-cancelado':'status-agendado'}" style="margin-top:3px;display:inline-block">${statusLabel(a.status)}</span></div>
+                <div style="display:flex;flex-direction:column;gap:6px">
+                    <button class="btn-icon editar-att" data-id="${a.id}" title="Editar">✏️</button>
+                    <button class="btn-icon excluir-att" data-id="${a.id}" title="Excluir">🗑️</button>
                 </div>
-                <h2>📌 Hoje · ${formatarDataBr(hoje)}</h2>
-                <div class="card">${atendimentosHoje.length ? atendimentosHoje.map(att => renderAtendimentoLinha(att)).join('') : '<p class="text-small">Nenhum atendimento hoje</p>'}</div>
-                <h2>📅 Amanhã · ${formatarDataBr(amanha)}</h2>
-                <div class="card">${amanhaAtend.length ? amanhaAtend.map(att => renderAtendimentoLinha(att)).join('') : '<p class="text-small">Nenhum agendamento</p>'}</div>
-                <h2>🗓️ Próximos 7 dias</h2>
-                <div class="card">${proximosAtend.slice(0,10).map(att => `<div class="atendimento-linha" data-id="${att.id}"><span class="horario-badge">${att.horario}</span><div class="info-att"><span class="paciente-nome">${att.pacienteNome}</span><div class="servico-tipo">${att.servicoNome}</div></div><span class="badge-status ${att.status === 'realizado' ? 'status-realizado' : att.status === 'cancelado' ? 'status-cancelado' : 'status-agendado'}">${att.status}</span></div>`).join('') || '<span class="text-small">Sem atendimentos futuros</span>'}</div>
-                <h2>📊 Produtividade mensal</h2>
-                <div class="card">${Object.entries(servicoCount).map(([serv, qtd]) => `<div class="flex-row" style="justify-content:space-between"><strong>${serv}</strong> <span>${qtd}</span></div>`).join('')}<hr><div class="flex-row" style="justify-content:space-between"><strong>Total atendimentos</strong> <strong>${totalMes}</strong></div><div class="flex-row" style="justify-content:space-between"><span>💰 Líquido recebido (${formatarMoeda(totalLiquidoMes)})</span></div></div>
-            `;
-        }
+            </div>`).join('') + '</div>';
+        document.querySelectorAll('#resultadoAtend .atendimento-linha').forEach(el => el.addEventListener('click', e => { if (e.target.closest('button')) return; abrirDetalhe(el.dataset.id); }));
+        document.querySelectorAll('#resultadoAtend .editar-att').forEach(b => b.addEventListener('click', e => { e.stopPropagation(); const a = atendimentos.find(x=>x.id===b.dataset.id); if (a) abrirFormularioAtendimento(a.data, a); }));
+        document.querySelectorAll('#resultadoAtend .excluir-att').forEach(b => b.addEventListener('click', e => { e.stopPropagation(); confirmarExclusao(b.dataset.id, () => renderResultadoAtend()); }));
+    }
 
-        function renderAtendimentoLinha(att) {
-            const statusClass = att.status === 'realizado' ? 'status-realizado' : (att.status === 'cancelado' ? 'status-cancelado' : 'status-agendado');
-            return `<div class="atendimento-linha" data-id="${att.id}">
-                        <span class="horario-badge">${att.horario}</span>
-                        <div class="info-att"><span class="paciente-nome">${att.pacienteNome}</span><div class="servico-tipo">${att.servicoNome} · ${att.valorTotal ? formatarMoeda(att.valorTotal) : ''}</div></div>
-                        <div class="status-small"><span class="badge-status ${statusClass}">${att.status}</span></div>
-                    </div>`;
-        }
+    function hookAtendimentos() {
+        renderResultadoAtend();
+        document.getElementById('buscaAtend').addEventListener('input', e => { buscaAtend = e.target.value; renderResultadoAtend(); });
+        document.getElementById('filtroDe').addEventListener('change', e => { filtroDe = e.target.value; renderResultadoAtend(); });
+        document.getElementById('filtroAte').addEventListener('change', e => { filtroAte = e.target.value; renderResultadoAtend(); });
+        document.querySelectorAll('.chip').forEach(c => c.addEventListener('click', () => { filtroStatusAtend = c.dataset.status; render(); }));
+        document.getElementById('btnNovoAttLista').addEventListener('click', () => abrirFormularioAtendimento(hojeStr(), null));
+    }
 
-        function hookDashboard() {
-            document.querySelectorAll('.atendimento-linha').forEach(el => {
-                el.addEventListener('click', (e) => { e.stopPropagation(); const id = el.dataset.id; const atend = atendimentos.find(a => a.id === id); if (atend) abrirModalEdicaoAtendimento(atend); });
+    // ========== CALENDÁRIO (mês + dia) ==========
+    function renderCalendario() {
+        const primeiroDia = new Date(calendarioAno, calendarioMes, 1);
+        const ultimoDia = new Date(calendarioAno, calendarioMes+1, 0).getDate();
+        const mesNome = new Date(calendarioAno, calendarioMes).toLocaleString('pt-BR', { month: 'long' });
+        let html = `<div class="calendario-header"><button id="btnMesAnt" class="btn-outline">←</button><span style="font-weight:700;text-transform:capitalize">${mesNome} ${calendarioAno}</span><button id="btnMesProx" class="btn-outline">→</button></div>`;
+        html += `<div class="calendario-grid">`;
+        ['D','S','T','Q','Q','S','S'].forEach(d => html += `<div class="dia-nome">${d}</div>`);
+        for (let i = 0; i < primeiroDia.getDay(); i++) html += `<div></div>`;
+        for (let d = 1; d <= ultimoDia; d++) {
+            const ds = `${calendarioAno}-${pad(calendarioMes+1)}-${pad(d)}`;
+            const tem = atendimentos.some(a => a.data === ds && a.status !== 'cancelado');
+            html += `<div class="dia-num ${ds===dataSelecionada?'selecionado':''} ${ds===hojeStr()?'hoje':''}" data-data="${ds}">${d}${tem?'<span class="dot"></span>':''}</div>`;
+        }
+        html += `</div>`;
+        const attDia = atendimentos.filter(a => a.data === dataSelecionada).sort((a,b)=>a.horario.localeCompare(b.horario));
+        const diaSem = nomeDiaSemana[new Date(dataSelecionada+'T12:00:00').getDay()];
+        html += `<h2>${diaSem} · ${formatarDataBr(dataSelecionada)}</h2>
+        <button id="btnNovoAttCal" style="width:100%;margin-bottom:12px">+ Novo atendimento neste dia</button>
+        <div class="card">${attDia.length ? attDia.map(a=>renderAtendimentoLinha(a)).join('') : '<div class="empty-state">Nenhum atendimento neste dia</div>'}</div>`;
+        return html;
+    }
+
+    function hookCalendario() {
+        document.getElementById('btnMesAnt').addEventListener('click', () => { if (calendarioMes===0){calendarioMes=11;calendarioAno--;} else calendarioMes--; render(); });
+        document.getElementById('btnMesProx').addEventListener('click', () => { if (calendarioMes===11){calendarioMes=0;calendarioAno++;} else calendarioMes++; render(); });
+        document.querySelectorAll('.dia-num').forEach(el => el.addEventListener('click', () => { dataSelecionada = el.dataset.data; render(); }));
+        document.getElementById('btnNovoAttCal').addEventListener('click', () => abrirFormularioAtendimento(dataSelecionada, null));
+        document.querySelectorAll('.atendimento-linha[data-id]').forEach(el => el.addEventListener('click', () => abrirDetalhe(el.dataset.id)));
+    }
+
+    // ========== SEMANA (grade estilo agenda + link compartilhado) ==========
+    function dadosDaSemana(base) {
+        const dias = [];
+        for (let i = 0; i < 6; i++) { const d = new Date(base); d.setDate(d.getDate()+i); dias.push(isoDe(d)); }
+        return dias;
+    }
+
+    function renderSemana(compartilhar) {
+        const dias = dadosDaSemana(semanaBase);
+        const inicio = 7, fim = 20, slotH = 44;
+        const titulo = `${formatarDataBr(dias[0])} – ${formatarDataBr(dias[5])}`;
+        let html = `<div class="calendario-header">
+            <button id="semAnt" class="btn-outline">←</button>
+            <span style="font-weight:700;font-size:.9rem;text-align:center">Semana<br>${titulo}</span>
+            <button id="semProx" class="btn-outline">→</button></div>
+        <button id="btnHojeSemana" class="btn-outline btn-small" style="margin-bottom:10px">Semana atual</button>
+        <div class="semana-scroll"><div class="semana-grid">
+            <div class="dia-cab" style="border-left:none"></div>
+            ${dias.map(ds => { const dt = new Date(ds+'T12:00:00'); return `<div class="dia-cab ${ds===hojeStr()?'hoje':''}">${nomeDiaSemana[dt.getDay()]}<br>${ds.slice(8,10)}/${ds.slice(5,7)}</div>`; }).join('')}`;
+        for (let h = inicio; h < fim; h++) {
+            html += `<div class="hora-label">${pad(h)}:00</div>`;
+            dias.forEach(() => html += `<div class="celula"></div>`);
+        }
+        // eventos: sobreposição absoluta sobre o grid (deslocamento proporcional por dia)
+        for (let di = 0; di < dias.length; di++) {
+            html += `<div class="col-overlay" style="left: calc(46px + (100% - 46px) / 6 * ${di}); width: calc((100% - 46px) / 6);">`;
+            atendimentos.filter(a => a.data === dias[di]).forEach(a => {
+                const [hh, mm] = (a.horario||'00:00').split(':').map(Number);
+                if (hh < inicio || hh >= fim) return;
+                const top = ((hh - inicio) * slotH) + (mm/60)*slotH;
+                html += `<div class="evt ${a.status}" data-id="${a.id}" style="top:${top}px;height:${slotH-4}px"><small>${esc(a.horario)}</small>${esc(a.pacienteNome)}<small>${esc(a.servicoNome)}</small></div>`;
             });
+            html += `</div>`;
         }
-
-        // ========== CALENDÁRIO + NOVO ATENDIMENTO COM VALOR E COMISSÃO ==========
-        function renderCalendarioCompleto() {
-            const primeiroDia = new Date(calendarioAno, calendarioMes, 1);
-            const ultimoDia = new Date(calendarioAno, calendarioMes+1, 0).getDate();
-            const dias = Array.from({length: ultimoDia}, (_,i) => i+1);
-            const mesNome = new Date(calendarioAno, calendarioMes).toLocaleString('pt-BR', { month: 'long' });
-            let html = `<div class="calendario-header"><button id="btnMesAnt">←</button><span style="font-weight:600">${mesNome} ${calendarioAno}</span><button id="btnMesProx">→</button></div>`;
-            html += `<div class="flex-row" style="margin-bottom:12px;"><button id="visualizacaoDiaBtn" class="btn-small btn-outline">Dia</button><button id="visualizacaoSemanaBtn" class="btn-small btn-outline">Semana</button><button id="visualizacaoMesBtn" class="btn-small btn-outline">Mês</button></div>`;
-            if (visualizacaoCalendario === 'mes') {
-                html += `<div class="calendario-grid">`; ['D','S','T','Q','Q','S','S'].forEach(d => html += `<div class="dia-nome">${d}</div>`);
-                for(let i=0; i<primeiroDia.getDay(); i++) html += `<div></div>`;
-                dias.forEach(d => { const dataStr = `${calendarioAno}-${String(calendarioMes+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`; const selec = dataStr === dataSelecionada ? 'selecionado' : ''; const hojeClass = dataStr === hojeStr() ? 'hoje' : ''; html += `<div class="dia-num ${selec} ${hojeClass}" data-data="${dataStr}">${d}</div>`; });
-                html += `</div>`;
-            } else {
-                const attDia = atendimentos.filter(a => a.data === dataSelecionada).sort((a,b)=>a.horario.localeCompare(b.horario));
-                html += `<h3>${formatarDataBr(dataSelecionada)}</h3><button id="btnNovoAttCal" class="btn-outline" style="margin-bottom:12px;">+ Novo atendimento</button>`;
-                html += `<div class="card">${attDia.length ? attDia.map(att => `<div class="atendimento-linha" data-id="${att.id}">${renderAtendimentoLinha(att)}</div>`).join('') : '<p class="text-small">Nenhum atendimento neste dia</p>'}</div>`;
-            }
-            return html;
+        html += `</div></div>`;
+        if (!compartilhar) {
+            html += `<div class="card">
+                <h3>🔗 Compartilhar com a secretária</h3>
+                <p class="text-small" style="margin-bottom:10px">Gera um link <strong>somente leitura</strong> com a agenda desta semana. Ela não consegue alterar nada.</p>
+                <button id="btnGerarLink" style="width:100%">📤 Gerar link da semana</button>
+                <div id="linkGerado" style="margin-top:10px"></div>
+            </div>`;
         }
+        return html;
+    }
 
-        function hookCalendario() {
-            document.getElementById('btnMesAnt')?.addEventListener('click', ()=>{ if(calendarioMes===0){ calendarioMes=11; calendarioAno--; } else calendarioMes--; render(); });
-            document.getElementById('btnMesProx')?.addEventListener('click', ()=>{ if(calendarioMes===11){ calendarioMes=0; calendarioAno++; } else calendarioMes++; render(); });
-            document.getElementById('visualizacaoDiaBtn')?.addEventListener('click', ()=>{ visualizacaoCalendario='dia'; render(); });
-            document.getElementById('visualizacaoSemanaBtn')?.addEventListener('click', ()=>{ visualizacaoCalendario='semana'; render(); });
-            document.getElementById('visualizacaoMesBtn')?.addEventListener('click', ()=>{ visualizacaoCalendario='mes'; render(); });
-            document.querySelectorAll('.dia-num').forEach(el => { el.addEventListener('click', (e)=>{ if(el.dataset.data) dataSelecionada = el.dataset.data; visualizacaoCalendario='dia'; render(); }); });
-            document.getElementById('btnNovoAttCal')?.addEventListener('click', ()=>{ abrirFormularioAtendimento(dataSelecionada, null); });
-            document.querySelectorAll('.atendimento-linha').forEach(el => { el.addEventListener('click', (e) => { const id = el.closest('.atendimento-linha')?.dataset.id; const att = atendimentos.find(a => a.id === id); if(att) abrirModalEdicaoAtendimento(att); }); });
-        }
-
-        function calcularValoresLiquidos(valorTotal, porcentagemProf) {
-            const liquidoProf = (valorTotal * porcentagemProf) / 100;
-            const liquidoClinica = valorTotal - liquidoProf;
-            return { liquidoProf, liquidoClinica };
-        }
-
-        function abrirFormularioAtendimento(data, atendExistente) {
-            const isEdicao = !!atendExistente;
-            const opcoesPacientes = pacientes.map(p => `<option value="${p.id}" ${isEdicao && p.id === atendExistente.pacienteId ? 'selected' : ''}>${p.nome}</option>`).join('');
-            const opcoesServicos = servicos.map(s => `<option value="${s.id}" ${isEdicao && s.id === atendExistente.servicoId ? 'selected' : ''} data-porcentagem="${s.porcentagemProfissional}" data-valor="${s.valorPadrao}">${s.nome} (padrão ${formatarMoeda(s.valorPadrao)} | Prof ${s.porcentagemProfissional}% | Clínica ${s.porcentagemClinica}%)</option>`).join('');
-            const modal = document.createElement('div');
-            modal.className = 'modal-overlay';
-            modal.innerHTML = `
-                <div class="modal-card">
-                    <h3>${isEdicao ? '✏️ Editar atendimento' : '📌 Novo atendimento'}</h3>
-                    <input type="date" id="formData" value="${isEdicao ? atendExistente.data : data}">
-                    <input type="time" id="formHora" value="${isEdicao ? atendExistente.horario : '10:00'}">
-                    <select id="formPaciente"><option value="">Selecione paciente</option>${opcoesPacientes}</select>
-                    <button id="btnNovoPacienteRapido" class="btn-outline btn-small" type="button">➕ Cadastrar paciente rápido</button>
-                    <select id="formServico"><option value="">Selecione serviço</option>${opcoesServicos}</select>
-                    <div class="flex-row" style="gap: 8px;">
-                        <div style="flex:1"><label>Valor total (R$)</label><input type="number" id="formValorTotal" step="0.01" placeholder="Valor total" value="${isEdicao ? atendExistente.valorTotal : ''}"></div>
-                        <div style="flex:1"><label>% Profissional</label><input type="number" id="formPorcentagemProf" step="1" placeholder="%" value="${isEdicao ? atendExistente.porcentagemProfissional : ''}"></div>
-                    </div>
-                    <div class="card" style="background:#fffaf5; padding:8px; margin-top:0;"><span class="text-small">💰 Líquido profissional: <strong id="previewLiquido">R$ 0,00</strong> &nbsp;| Clínica: <strong id="previewClinica">R$ 0,00</strong></span></div>
-                    <select id="formStatus">
-                        <option value="agendado" ${isEdicao && atendExistente.status==='agendado'?'selected':''}>Agendado</option>
-                        <option value="realizado" ${isEdicao && atendExistente.status==='realizado'?'selected':''}>Realizado</option>
-                        <option value="cancelado" ${isEdicao && atendExistente.status==='cancelado'?'selected':''}>Cancelado</option>
-                    </select>
-                    <textarea id="formObs" placeholder="Observações">${isEdicao ? (atendExistente.obs||'') : ''}</textarea>
-                    <div class="flex-row"><button id="salvarAttBtn">Salvar</button><button id="cancelarAttBtn" class="btn-outline">Cancelar</button></div>
+    function hookSemana() {
+        document.getElementById('semAnt').addEventListener('click', () => { semanaBase.setDate(semanaBase.getDate()-7); render(); });
+        document.getElementById('semProx').addEventListener('click', () => { semanaBase.setDate(semanaBase.getDate()+7); render(); });
+        document.getElementById('btnHojeSemana').addEventListener('click', () => { semanaBase = segundaDaSemana(new Date()); render(); });
+        document.querySelectorAll('.evt').forEach(el => el.addEventListener('click', () => abrirDetalhe(el.dataset.id)));
+        document.getElementById('btnGerarLink')?.addEventListener('click', () => {
+            const dias = dadosDaSemana(semanaBase);
+            const dados = atendimentos.filter(a => dias.includes(a.data) && a.status !== 'cancelado')
+                .map(a => ({ data: a.data, horario: a.horario, paciente: a.pacienteNome, servico: a.servicoNome, status: a.status }));
+            const payload = { de: dias[0], ate: dias[5], gerado: hojeStr(), itens: dados };
+            const b64 = btoa(unescape(encodeURIComponent(JSON.stringify(payload))));
+            const base = location.href.split('#')[0];
+            const link = base + '#/semana?d=' + b64;
+            const box = document.getElementById('linkGerado');
+            box.innerHTML = `<input type="text" id="campoLink" value="${link}" readonly style="font-size:.72rem">
+                <div class="flex-row" style="margin-top:8px">
+                    <button id="btnCopiarLink" class="btn-outline btn-small" style="flex:1">📋 Copiar link</button>
+                    <a class="btn btn-small btn-verde" style="flex:1;text-align:center;text-decoration:none;display:flex;align-items:center;justify-content:center" target="_blank" href="https://wa.me/?text=${encodeURIComponent('Agenda da semana (' + formatarDataBr(dias[0]) + ' a ' + formatarDataBr(dias[5]) + '): ' + link)}">💬 Enviar no WhatsApp</a>
                 </div>
-            `;
-            document.body.appendChild(modal);
-            const servicoSelect = document.getElementById('formServico');
-            const valorTotalInput = document.getElementById('formValorTotal');
-            const porcentagemInput = document.getElementById('formPorcentagemProf');
-            const previewLiq = document.getElementById('previewLiquido');
-            const previewClin = document.getElementById('previewClinica');
+                <p class="text-small" style="margin-top:8px">⚠️ O link contém os dados da semana no próprio endereço — funciona em qualquer celular, mas se você mudar a agenda depois, gere um link novo.</p>`;
+            document.getElementById('btnCopiarLink').addEventListener('click', () => {
+                const c = document.getElementById('campoLink'); c.select(); c.setSelectionRange(0, 99999);
+                (navigator.clipboard ? navigator.clipboard.writeText(link) : Promise.reject()).then(()=>{ document.getElementById('btnCopiarLink').innerText = '✅ Copiado!'; }).catch(()=>{ document.execCommand('copy'); document.getElementById('btnCopiarLink').innerText = '✅ Copiado!'; });
+            });
+        });
+    }
 
-            function atualizarPreview() {
-                let total = parseFloat(valorTotalInput.value) || 0;
-                let perc = parseFloat(porcentagemInput.value) || 0;
-                if(perc > 100) perc = 100;
-                if(perc < 0) perc = 0;
-                const liquidoProf = (total * perc) / 100;
-                const liquidoClin = total - liquidoProf;
-                previewLiq.innerText = formatarMoeda(liquidoProf);
-                previewClin.innerText = formatarMoeda(liquidoClin);
-            }
-            servicoSelect?.addEventListener('change', (e) => {
-                const opt = e.target.options[e.target.selectedIndex];
-                if(opt && opt.dataset.valor && opt.dataset.porcentagem){
-                    valorTotalInput.value = opt.dataset.valor;
-                    porcentagemInput.value = opt.dataset.porcentagem;
-                    atualizarPreview();
-                }
-            });
-            valorTotalInput?.addEventListener('input', atualizarPreview);
-            porcentagemInput?.addEventListener('input', atualizarPreview);
-            document.getElementById('btnNovoPacienteRapido')?.addEventListener('click', ()=>{
-                const nome = prompt('Nome do novo paciente:');
-                if(nome){
-                    const telefone = prompt('Telefone (opcional)',''); const nascimento = prompt('Data nascimento (opcional)','');
-                    const novoId = 'p'+Date.now();
-                    pacientes.push({ id: novoId, nome, telefone: telefone||'', nascimento: nascimento||'', obs: '' });
-                    salvarTudo();
-                    const selectPac = document.getElementById('formPaciente');
-                    selectPac.innerHTML = `<option value="">Selecione paciente</option>` + pacientes.map(p => `<option value="${p.id}">${p.nome}</option>`).join('');
-                    selectPac.value = novoId;
-                }
-            });
-            document.getElementById('salvarAttBtn')?.addEventListener('click', ()=>{
-                const pacienteId = document.getElementById('formPaciente').value;
-                const servicoId = document.getElementById('formServico').value;
-                if(!pacienteId || !servicoId){ alert('Selecione paciente e serviço'); return; }
-                const paciente = pacientes.find(p=> p.id === pacienteId);
-                const servico = servicos.find(s=> s.id === servicoId);
-                if(!paciente || !servico) return;
-                let valorTotal = parseFloat(valorTotalInput.value) || 0;
-                let percProf = parseFloat(porcentagemInput.value) || 0;
-                if(percProf > 100) percProf = 100;
-                const { liquidoProf, liquidoClinica } = calcularValoresLiquidos(valorTotal, percProf);
-                const dados = {
-                    id: isEdicao ? atendExistente.id : 'a'+Date.now(),
-                    data: document.getElementById('formData').value,
-                    horario: document.getElementById('formHora').value,
-                    pacienteId: paciente.id,
-                    pacienteNome: paciente.nome,
-                    servicoId: servico.id,
-                    servicoNome: servico.nome,
-                    status: document.getElementById('formStatus').value,
-                    obs: document.getElementById('formObs').value,
-                    valorTotal: valorTotal,
-                    porcentagemProfissional: percProf,
-                    porcentagemClinica: 100 - percProf,
-                    valorLiquidoProfissional: liquidoProf,
-                    valorLiquidoClinica: liquidoClinica
-                };
-                if(isEdicao) Object.assign(atendExistente, dados);
-                else atendimentos.push(dados);
+    // ========== MODAL: DETALHE DO ATENDIMENTO ==========
+    function abrirDetalhe(id) {
+        const atend = atendimentos.find(a => a.id === id);
+        if (!atend) return;
+        const modal = document.createElement('div');
+        modal.className = 'modal-overlay';
+        modal.innerHTML = `<div class="modal-card">
+            <h3>${esc(atend.pacienteNome)}</h3>
+            <p class="text-small" style="margin-bottom:10px">${formatarDataBr(atend.data)} às ${esc(atend.horario)}</p>
+            <p><strong>Serviço:</strong> ${esc(atend.servicoNome)}</p>
+            <p style="margin-top:8px"><strong>Valor total:</strong> ${formatarMoeda(atend.valorTotal)}<br>
+            <strong>Sua parte (${atend.porcentagemProfissional||0}%):</strong> ${formatarMoeda(atend.valorLiquidoProfissional)}<br>
+            <strong>Clínica:</strong> ${formatarMoeda(atend.valorLiquidoClinica)}</p>
+            <label style="margin-top:10px">Status</label>
+            <select id="modalStatus">
+                <option value="agendado" ${atend.status==='agendado'?'selected':''}>Agendado</option>
+                <option value="realizado" ${atend.status==='realizado'?'selected':''}>Realizado</option>
+                <option value="cancelado" ${atend.status==='cancelado'?'selected':''}>Cancelado (valor sai dos totais)</option>
+            </select>
+            <label>Observações</label>
+            <textarea id="modalObs">${esc(atend.obs)}</textarea>
+            <div class="modal-acoes">
+                <button id="mSalvar">💾 Salvar</button>
+                <button id="mEditar" class="btn-outline">✏️ Editar dados</button>
+                <button id="mExcluir" class="btn-danger">🗑️ Excluir</button>
+            </div>
+            <button id="mFechar" class="btn-outline btn-small" style="width:100%;margin-top:10px">Fechar</button>
+        </div>`;
+        document.body.appendChild(modal);
+        document.getElementById('mSalvar').addEventListener('click', () => { atend.status = document.getElementById('modalStatus').value; atend.obs = document.getElementById('modalObs').value; salvarTudo(); modal.remove(); render(); });
+        document.getElementById('mEditar').addEventListener('click', () => { modal.remove(); abrirFormularioAtendimento(atend.data, atend); });
+        document.getElementById('mExcluir').addEventListener('click', () => { modal.remove(); confirmarExclusao(atend.id); });
+        document.getElementById('mFechar').addEventListener('click', () => modal.remove());
+        modal.addEventListener('click', e => { if (e.target === modal) modal.remove(); });
+    }
+
+    // ========== EXCLUSÃO COM CONFIRMAÇÃO ==========
+    function confirmarExclusao(id, callbackExtra) {
+        const atend = atendimentos.find(a => a.id === id);
+        if (!atend) return;
+        const modal = document.createElement('div');
+        modal.className = 'modal-overlay';
+        modal.innerHTML = `<div class="modal-card" style="text-align:center">
+            <div style="font-size:2.2rem;margin-bottom:8px">🗑️</div>
+            <h3>Excluir atendimento?</h3>
+            <p style="margin:8px 0"><strong>${esc(atend.pacienteNome)}</strong> · ${esc(atend.servicoNome)}<br>${formatarDataBr(atend.data)} às ${esc(atend.horario)}</p>
+            <p class="text-small" style="margin-bottom:14px">O valor de <strong>${formatarMoeda(atend.valorTotal)}</strong> será removido de todos os totais e relatórios imediatamente. Essa ação não pode ser desfeita.</p>
+            <div class="modal-acoes">
+                <button id="confExcluir" style="background:var(--red)">Sim, excluir</button>
+                <button id="confCancelar" class="btn-outline">Cancelar</button>
+            </div>
+        </div>`;
+        document.body.appendChild(modal);
+        document.getElementById('confExcluir').addEventListener('click', () => {
+            atendimentos = atendimentos.filter(a => a.id !== id);
+            salvarTudo();
+            modal.remove();
+            if (callbackExtra) callbackExtra(); else render();
+        });
+        document.getElementById('confCancelar').addEventListener('click', () => modal.remove());
+        modal.addEventListener('click', e => { if (e.target === modal) modal.remove(); });
+    }
+
+    // ========== FORMULÁRIO NOVO / EDITAR ==========
+    function abrirFormularioAtendimento(data, atendExistente) {
+        const isEdicao = !!atendExistente;
+        const opcoesPacientes = pacientes.map(p => `<option value="${p.id}" ${isEdicao && p.id===atendExistente.pacienteId?'selected':''}>${esc(p.nome)}</option>`).join('');
+        const opcoesServicos = servicos.map(s => `<option value="${s.id}" ${isEdicao && s.id===atendExistente.servicoId?'selected':''} data-porcentagem="${s.porcentagemProfissional}" data-valor="${s.valorPadrao}">${esc(s.nome)} (padrão ${formatarMoeda(s.valorPadrao)})</option>`).join('');
+        const modal = document.createElement('div');
+        modal.className = 'modal-overlay';
+        modal.innerHTML = `<div class="modal-card">
+            <h3>${isEdicao ? '✏️ Editar atendimento' : '📌 Novo atendimento'}</h3>
+            ${isEdicao ? '<p class="text-small" style="margin-bottom:8px">Os valores serão recalculados automaticamente e os relatórios atualizados.</p>' : ''}
+            <label>Data</label><input type="date" id="formData" value="${isEdicao ? atendExistente.data : data}">
+            <label>Horário</label><input type="time" id="formHora" value="${isEdicao ? atendExistente.horario : '10:00'}">
+            <label>Paciente</label>
+            <select id="formPaciente"><option value="">Selecione paciente</option>${opcoesPacientes}</select>
+            <button id="btnNovoPacienteRapido" class="btn-outline btn-small" type="button" style="margin-bottom:8px">➕ Cadastrar paciente rápido</button>
+            <label>Serviço</label>
+            <select id="formServico"><option value="">Selecione serviço</option>${opcoesServicos}</select>
+            <div class="flex-row" style="gap:8px">
+                <div style="flex:1"><label>Valor total (R$)</label><input type="number" id="formValorTotal" step="0.01" min="0" inputmode="decimal" value="${isEdicao ? atendExistente.valorTotal : ''}"></div>
+                <div style="flex:1"><label>% Profissional</label><input type="number" id="formPorcentagemProf" step="1" min="0" max="100" inputmode="numeric" value="${isEdicao ? atendExistente.porcentagemProfissional : ''}"></div>
+            </div>
+            <div class="card" style="background:#fffaf5;padding:10px 12px;margin:8px 0">
+                <span class="text-small">💰 Sua parte: <strong id="previewLiquido">R$ 0,00</strong> · Clínica: <strong id="previewClinica">R$ 0,00</strong></span>
+            </div>
+            <label>Status</label>
+            <select id="formStatus">
+                <option value="agendado" ${isEdicao && atendExistente.status==='agendado'?'selected':''}>Agendado</option>
+                <option value="realizado" ${isEdicao && atendExistente.status==='realizado'?'selected':''}>Realizado</option>
+                <option value="cancelado" ${isEdicao && atendExistente.status==='cancelado'?'selected':''}>Cancelado</option>
+            </select>
+            <label>Observações</label>
+            <textarea id="formObs" placeholder="Observações">${isEdicao ? esc(atendExistente.obs) : ''}</textarea>
+            <div class="modal-acoes"><button id="salvarAttBtn">Salvar</button><button id="cancelarAttBtn" class="btn-outline">Cancelar</button></div>
+        </div>`;
+        document.body.appendChild(modal);
+        const servicoSelect = document.getElementById('formServico');
+        const valorTotalInput = document.getElementById('formValorTotal');
+        const porcentagemInput = document.getElementById('formPorcentagemProf');
+        function atualizarPreview() {
+            let total = parseFloat(valorTotalInput.value) || 0;
+            let perc = parseFloat(porcentagemInput.value) || 0;
+            if (perc > 100) perc = 100; if (perc < 0) perc = 0;
+            const { liquidoProf, liquidoClinica } = calcularValoresLiquidos(total, perc);
+            document.getElementById('previewLiquido').innerText = formatarMoeda(liquidoProf);
+            document.getElementById('previewClinica').innerText = formatarMoeda(liquidoClinica);
+        }
+        servicoSelect.addEventListener('change', e => {
+            const opt = e.target.options[e.target.selectedIndex];
+            if (opt && opt.dataset.valor) { valorTotalInput.value = opt.dataset.valor; porcentagemInput.value = opt.dataset.porcentagem; atualizarPreview(); }
+        });
+        valorTotalInput.addEventListener('input', atualizarPreview);
+        porcentagemInput.addEventListener('input', atualizarPreview);
+        document.getElementById('btnNovoPacienteRapido').addEventListener('click', () => {
+            const nome = prompt('Nome do novo paciente:');
+            if (nome) {
+                const telefone = prompt('Telefone (opcional)','') || '';
+                pacientes.push({ id: 'p'+Date.now(), nome, telefone, nascimento: '', obs: '' });
                 salvarTudo();
-                modal.remove();
-                render();
-            });
-            document.getElementById('cancelarAttBtn')?.addEventListener('click', ()=> modal.remove());
-            if(!isEdicao && servicos.length) { valorTotalInput.value = servicos[0].valorPadrao; porcentagemInput.value = servicos[0].porcentagemProfissional; atualizarPreview(); }
-            else if(isEdicao) atualizarPreview();
-        }
-
-        function abrirModalEdicaoAtendimento(atend) {
-            const modal = document.createElement('div');
-            modal.className = 'modal-overlay';
-            modal.innerHTML = `<div class="modal-card"><h3>${atend.pacienteNome} · ${formatarDataBr(atend.data)} ${atend.horario}</h3><p><strong>Serviço:</strong> ${atend.servicoNome}</p><p><strong>Valor total:</strong> ${formatarMoeda(atend.valorTotal||0)}<br><strong>Sua comissão (${atend.porcentagemProfissional||0}%):</strong> ${formatarMoeda(atend.valorLiquidoProfissional||0)}<br><strong>Clínica:</strong> ${formatarMoeda(atend.valorLiquidoClinica||0)}</p><label>Alterar status</label><select id="modalStatusSelect"><option value="agendado" ${atend.status==='agendado'?'selected':''}>Agendado</option><option value="realizado" ${atend.status==='realizado'?'selected':''}>Realizado</option><option value="cancelado" ${atend.status==='cancelado'?'selected':''}>Cancelado</option></select><textarea id="modalObs">${atend.obs||''}</textarea><div class="flex-row"><button id="salvarStatusBtn">Salvar alterações</button><button id="editarCompletoBtn" class="btn-outline">✎ Editar dados completos</button><button id="excluirAttBtn" class="btn-outline" style="color:#b91c1c">Excluir</button></div><button id="fecharModal" class="btn-outline btn-small">Fechar</button></div>`;
-            document.body.appendChild(modal);
-            document.getElementById('salvarStatusBtn').addEventListener('click', ()=>{ atend.status = document.getElementById('modalStatusSelect').value; atend.obs = document.getElementById('modalObs').value; salvarTudo(); modal.remove(); render(); });
-            document.getElementById('editarCompletoBtn').addEventListener('click', ()=>{ modal.remove(); abrirFormularioAtendimento(atend.data, atend); });
-            document.getElementById('excluirAttBtn').addEventListener('click', ()=>{ if(confirm(`Excluir atendimento de ${atend.pacienteNome}?`)){ atendimentos = atendimentos.filter(a => a.id !== atend.id); salvarTudo(); modal.remove(); render(); } });
-            document.getElementById('fecharModal').addEventListener('click', ()=> modal.remove());
-        }
-
-        // PACIENTES, SERVIÇOS, FINANCEIRO E RELATÓRIOS (com valores)
-        function renderPacientes() { return `<h2>👥 Pacientes</h2><button id="novoPacienteBtn" class="btn-outline">+ Novo paciente</button><input type="text" id="buscaPaciente" placeholder="Buscar..." style="margin:12px 0"><div class="card" id="listaPacientes">${pacientes.map(p=>`<div class="flex-row" style="justify-content:space-between; padding:8px 0"><div><strong>${p.nome}</strong><br><span class="text-small">${p.telefone || '—'}</span></div><div><button class="btn-small btn-outline editarPac" data-id="${p.id}">✎</button><button class="btn-small btn-outline excluirPac" data-id="${p.id}">🗑️</button></div></div>`).join('')}</div>`; }
-        function hookPacientes(){
-            document.getElementById('novoPacienteBtn')?.addEventListener('click',()=>{ let nome = prompt('Nome completo:'); if(nome){ let telefone = prompt('Telefone (opcional)'); pacientes.push({ id:'p'+Date.now(), nome, telefone: telefone||'', nascimento: '', obs:'' }); salvarTudo(); render(); } });
-            document.querySelectorAll('.editarPac').forEach(btn=>btn.addEventListener('click',(e)=>{ const id = btn.dataset.id; const p = pacientes.find(p=>p.id===id); if(p){ p.nome = prompt('Nome:',p.nome)||p.nome; p.telefone = prompt('Telefone:',p.telefone); salvarTudo(); render();} }));
-            document.querySelectorAll('.excluirPac').forEach(btn=>btn.addEventListener('click',(e)=>{ const id = btn.dataset.id; const temAtt = atendimentos.some(a=>a.pacienteId===id); if(temAtt){ alert('Exclua os atendimentos deste paciente primeiro na agenda.'); return; } if(confirm('Excluir paciente?')){ pacientes = pacientes.filter(p=>p.id!==id); salvarTudo(); render(); } }));
-            document.getElementById('buscaPaciente')?.addEventListener('input',(e)=>{ const term = e.target.value.toLowerCase(); document.querySelectorAll('#listaPacientes .flex-row').forEach(el=>{ const nome = el.querySelector('strong')?.innerText.toLowerCase() || ''; el.style.display = nome.includes(term) ? 'flex' : 'none'; }); });
-        }
-
-        function renderServicos(){
-            return `<h2>⚙️ Serviços</h2><button id="novoServicoBtn">+ Criar serviço</button><div class="card">${servicos.map(s=>`<div class="flex-row" style="justify-content:space-between;padding:8px 0"><div><strong>${s.nome}</strong><br><span class="text-small">Valor R$ ${s.valorPadrao} | Sua %: ${s.porcentagemProfissional}% | Clínica: ${s.porcentagemClinica}%</span></div><span><button class="btn-small btn-outline editarServ" data-id="${s.id}">✎</button><button class="btn-small btn-outline excluirServ" data-id="${s.id}">🗑️</button></span></div>`).join('')}</div>`;
-        }
-        function hookServicos(){
-            document.getElementById('novoServicoBtn')?.addEventListener('click',()=>{ const nome = prompt('Nome do serviço:'); if(nome){ let valor = parseFloat(prompt('Valor padrão (R$):', '100')) || 100; let percProf = parseFloat(prompt('Sua porcentagem (%):', '60')) || 60; if(percProf>100) percProf=100; let percClin = 100-percProf; servicos.push({id:'s'+Date.now(), nome, valorPadrao:valor, porcentagemProfissional:percProf, porcentagemClinica:percClin}); salvarTudo(); render(); } });
-            document.querySelectorAll('.editarServ').forEach(btn=>btn.addEventListener('click',(e)=>{ const id=btn.dataset.id; const s=servicos.find(s=>s.id===id); if(s){ s.nome = prompt('Nome:', s.nome)||s.nome; s.valorPadrao = parseFloat(prompt('Valor padrão:', s.valorPadrao)) || s.valorPadrao; s.porcentagemProfissional = parseFloat(prompt('Sua porcentagem:', s.porcentagemProfissional)) || s.porcentagemProfissional; if(s.porcentagemProfissional>100) s.porcentagemProfissional=100; s.porcentagemClinica = 100 - s.porcentagemProfissional; salvarTudo(); render(); } }));
-            document.querySelectorAll('.excluirServ').forEach(btn=>btn.addEventListener('click',(e)=>{ const id=btn.dataset.id; const emUso = atendimentos.some(a=>a.servicoId===id); if(emUso) { alert('Este serviço possui atendimentos vinculados. Não é possível excluir.'); return; } if(confirm('Excluir serviço?')){ servicos = servicos.filter(s=>s.id!==id); salvarTudo(); render(); } }));
-        }
-
-        function renderFinanceiro(){
-            const totalGeralLiquido = atendimentos.filter(a=> a.status === 'realizado').reduce((acc, a)=> acc + (a.valorLiquidoProfissional || 0), 0);
-            const porServico = {};
-            atendimentos.filter(a=> a.status === 'realizado').forEach(a=> { porServico[a.servicoNome] = (porServico[a.servicoNome] || 0) + (a.valorLiquidoProfissional || 0); });
-            return `<h2>💰 Resumo financeiro (líquido)</h2><div class="card"><div class="flex-row" style="justify-content:space-between;"><strong>Total líquido recebido (todos os realizados)</strong><span class="valor-liquido">${formatarMoeda(totalGeralLiquido)}</span></div><hr>${Object.entries(porServico).map(([serv,val]) => `<div class="flex-row" style="justify-content:space-between;"><span>${serv}</span><span>${formatarMoeda(val)}</span></div>`).join('')}</div><div class="card"><h3>📋 Últimos realizados</h3>${atendimentos.filter(a=>a.status==='realizado').slice(0,8).map(a=>`<div class="flex-row" style="justify-content:space-between;"><span>${a.pacienteNome} · ${a.servicoNome}</span><span>${formatarMoeda(a.valorLiquidoProfissional||0)}</span></div>`).join('')||'<span class="text-small">Nenhum atendimento realizado ainda</span>'}</div>`;
-        }
-        function hookFinanceiro(){}
-
-        function renderRelatorios(){
-            return `<h2>📄 Relatórios com valores</h2><div class="relatorio-filtros"><input type="month" id="relMes" value="${hojeStr().slice(0,7)}"><select id="relServico"><option value="">Todos os serviços</option>${servicos.map(s=>`<option value="${s.nome}">${s.nome}</option>`).join('')}</select><select id="relStatus"><option value="">Todos os status</option><option value="agendado">Agendado</option><option value="realizado">Realizado</option><option value="cancelado">Cancelado</option></select><button id="gerarRelatorioBtn" class="btn-small">Gerar relatório</button><button id="exportarPdfBtn" class="btn-small btn-pdf">📄 Exportar PDF</button></div><div id="relatorioResultado" class="card"></div>`;
-        }
-        function hookRelatorios(){
-            function gerar(){
-                const mes = document.getElementById('relMes').value;
-                const servicoFiltro = document.getElementById('relServico').value;
-                const statusFiltro = document.getElementById('relStatus').value;
-                let filtrados = atendimentos.filter(a=> a.data.startsWith(mes));
-                if(servicoFiltro) filtrados = filtrados.filter(a=> a.servicoNome === servicoFiltro);
-                if(statusFiltro) filtrados = filtrados.filter(a=> a.status === statusFiltro);
-                filtrados.sort((a,b)=> a.data.localeCompare(b.data) || a.horario.localeCompare(b.horario));
-                let totalLiq = filtrados.reduce((acc,a)=> acc + (a.valorLiquidoProfissional || 0), 0);
-                let html = `<div id="relatorio-print-area"><h3>Relatório de Atendimentos</h3><p><strong>Profissional:</strong> Dra. Alexsandra Souza</p><p><strong>Período:</strong> ${mes.replace('-','/')}</p><table style="width:100%; border-collapse:collapse;"><thead><tr style="border-bottom:1px solid #ccc;"><th>Data</th><th>Horário</th><th>Paciente</th><th>Serviço</th><th>Valor Total</th><th>Liq. Profissional</th><th>Status</th></tr></thead><tbody>`;
-                filtrados.forEach(a=>{ html += `<tr style="border-bottom:1px solid #eee;"><td>${formatarDataBr(a.data)}</td><td>${a.horario}</td><td>${a.pacienteNome}</td><td>${a.servicoNome}</td><td>${formatarMoeda(a.valorTotal||0)}</td><td>${formatarMoeda(a.valorLiquidoProfissional||0)}</td><td>${a.status}</td></tr>`; });
-                html += `<tr style="font-weight:bold;"><td colspan="5">Total líquido profissional</td><td>${formatarMoeda(totalLiq)}</td><td></td></tr>`;
-                html += `</tbody></table></div>`;
-                document.getElementById('relatorioResultado').innerHTML = html;
+                const sel = document.getElementById('formPaciente');
+                sel.innerHTML = `<option value="">Selecione paciente</option>` + pacientes.map(p => `<option value="${p.id}">${esc(p.nome)}</option>`).join('');
+                sel.value = pacientes[pacientes.length-1].id;
             }
-            document.getElementById('gerarRelatorioBtn')?.addEventListener('click', gerar);
-            document.getElementById('exportarPdfBtn')?.addEventListener('click', ()=>{ const conteudo = document.getElementById('relatorioResultado').innerHTML; if(!conteudo || !conteudo.includes('table')) { alert('Gere um relatório antes'); return; } const win = window.open('', '_blank'); win.document.write(`<html><head><title>Relatório Atendimentos</title><style>body{font-family:sans-serif; padding:20px} table{width:100%; border-collapse:collapse} th,td{border-bottom:1px solid #ccc; padding:8px; text-align:left}</style></head><body>${document.getElementById('relatorioResultado').innerHTML}</body></html>`); win.document.close(); win.print(); });
-            gerar();
-        }
+        });
+        document.getElementById('salvarAttBtn').addEventListener('click', () => {
+            const paciente = pacientes.find(p => p.id === document.getElementById('formPaciente').value);
+            const servico = servicos.find(s => s.id === document.getElementById('formServico').value);
+            if (!paciente || !servico) { alert('Selecione paciente e serviço'); return; }
+            let valorTotal = Math.max(0, parseFloat(valorTotalInput.value) || 0);
+            let percProf = parseFloat(porcentagemInput.value) || 0;
+            if (percProf > 100) percProf = 100; if (percProf < 0) percProf = 0;
+            const { liquidoProf, liquidoClinica } = calcularValoresLiquidos(valorTotal, percProf);
+            const dados = {
+                id: isEdicao ? atendExistente.id : 'a'+Date.now(),
+                data: document.getElementById('formData').value || hojeStr(),
+                horario: document.getElementById('formHora').value || '10:00',
+                pacienteId: paciente.id, pacienteNome: paciente.nome,
+                servicoId: servico.id, servicoNome: servico.nome,
+                status: document.getElementById('formStatus').value,
+                obs: document.getElementById('formObs').value,
+                valorTotal, porcentagemProfissional: percProf, porcentagemClinica: 100 - percProf,
+                valorLiquidoProfissional: liquidoProf, valorLiquidoClinica: liquidoClinica
+            };
+            if (isEdicao) Object.assign(atendExistente, dados); else atendimentos.push(dados);
+            salvarTudo(); modal.remove(); render();
+        });
+        document.getElementById('cancelarAttBtn').addEventListener('click', () => modal.remove());
+        modal.addEventListener('click', e => { if (e.target === modal) modal.remove(); });
+        if (!isEdicao && servicos.length) { servicoSelect.value = servicos[0].id; valorTotalInput.value = servicos[0].valorPadrao; porcentagemInput.value = servicos[0].porcentagemProfissional; }
+        atualizarPreview();
+    }
 
-        tabs.forEach(tab=>tab.addEventListener('click',()=>{abaAtiva=tab.dataset.aba; render();}));
-        salvarTudo();
-        render();
-    })();
+    // ========== PACIENTES ==========
+    function renderPacientes() {
+        return `<h2>👥 Pacientes</h2>
+        <button id="novoPacienteBtn" style="width:100%">+ Novo paciente</button>
+        <input type="search" id="buscaPaciente" placeholder="Buscar paciente...">
+        <div class="card" id="listaPacientes">${pacientes.length ? pacientes.map(p => `
+            <div class="flex-row" style="justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border)">
+                <div><strong>${esc(p.nome)}</strong><br><span class="text-small">${esc(p.telefone) || '—'}</span></div>
+                <div class="flex-row"><button class="btn-icon editarPac" data-id="${p.id}">✏️</button><button class="btn-icon excluirPac" data-id="${p.id}">🗑️</button></div>
+            </div>`).join('') : '<div class="empty-state">Nenhum paciente cadastrado</div>'}</div>`;
+    }
+    function hookPacientes() {
+        document.getElementById('novoPacienteBtn').addEventListener('click', () => {
+            const nome = prompt('Nome completo:');
+            if (nome) { const tel = prompt('Telefone (opcional)') || ''; pacientes.push({ id:'p'+Date.now(), nome, telefone: tel, nascimento:'', obs:'' }); salvarTudo(); render(); }
+        });
+        document.querySelectorAll('.editarPac').forEach(btn => btn.addEventListener('click', () => {
+            const p = pacientes.find(x => x.id === btn.dataset.id);
+            if (p) { p.nome = prompt('Nome:', p.nome) || p.nome; p.telefone = prompt('Telefone:', p.telefone) || p.telefone; salvarTudo(); render(); }
+        }));
+        document.querySelectorAll('.excluirPac').forEach(btn => btn.addEventListener('click', () => {
+            const id = btn.dataset.id;
+            if (atendimentos.some(a => a.pacienteId === id)) { alert('Este paciente tem atendimentos. Exclua os atendimentos primeiro na aba "Atendim."'); return; }
+            if (confirm('Excluir paciente?')) { pacientes = pacientes.filter(p => p.id !== id); salvarTudo(); render(); }
+        }));
+        document.getElementById('buscaPaciente').addEventListener('input', e => {
+            const t = e.target.value.toLowerCase();
+            document.querySelectorAll('#listaPacientes .flex-row').forEach(el => {
+                el.style.display = (el.querySelector('strong')?.innerText.toLowerCase() || '').includes(t) ? 'flex' : 'none';
+            });
+        });
+    }
+
+    // ========== SERVIÇOS ==========
+    function renderServicos() {
+        return `<h2>⚙️ Serviços</h2>
+        <button id="novoServicoBtn" style="width:100%">+ Criar serviço</button>
+        <div class="card">${servicos.map(s => `
+            <div class="flex-row" style="justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border)">
+                <div><strong>${esc(s.nome)}</strong><br><span class="text-small">Valor ${formatarMoeda(s.valorPadrao)} · Você ${s.porcentagemProfissional}% · Clínica ${s.porcentagemClinica}%</span></div>
+                <div class="flex-row"><button class="btn-icon editarServ" data-id="${s.id}">✏️</button><button class="btn-icon excluirServ" data-id="${s.id}">🗑️</button></div>
+            </div>`).join('')}</div>`;
+    }
+    function hookServicos() {
+        document.getElementById('novoServicoBtn').addEventListener('click', () => {
+            const nome = prompt('Nome do serviço:');
+            if (nome) {
+                const valor = parseFloat(prompt('Valor padrão (R$):', '100')) || 100;
+                const perc = parseFloat(prompt('Sua porcentagem (%):', '60')) || 60;
+                servicos.push({ id:'s'+Date.now(), nome, valorPadrao: valor, porcentagemProfissional: perc, porcentagemClinica: 100 - perc });
+                salvarTudo(); render();
+            }
+        });
+        document.querySelectorAll('.editarServ').forEach(btn => btn.addEventListener('click', () => {
+            const s = servicos.find(x => x.id === btn.dataset.id);
+            if (s) {
+                s.nome = prompt('Nome:', s.nome) || s.nome;
+                s.valorPadrao = parseFloat(prompt('Valor padrão:', s.valorPadrao)) || s.valorPadrao;
+                s.porcentagemProfissional = parseFloat(prompt('Sua %:', s.porcentagemProfissional)) ?? s.porcentagemProfissional;
+                s.porcentagemClinica = 100 - s.porcentagemProfissional;
+                salvarTudo(); render();
+            }
+        }));
+        document.querySelectorAll('.excluirServ').forEach(btn => btn.addEventListener('click', () => {
+            const id = btn.dataset.id;
+            if (atendimentos.some(a => a.servicoId === id)) { alert('Este serviço já foi usado em atendimentos e não pode ser excluído.'); return; }
+            if (confirm('Excluir serviço?')) { servicos = servicos.filter(s => s.id !== id); salvarTudo(); render(); }
+        }));
+    }
+
+    // ========== FINANCEIRO (só realizados) ==========
+    function renderFinanceiro() {
+        const realizados = atendimentos.filter(a => a.status === 'realizado');
+        const mesAtual = hojeStr().slice(0,7);
+        const realMes = realizados.filter(a => a.data.startsWith(mesAtual));
+        const porServico = {};
+        realizados.forEach(a => { porServico[a.servicoNome] = (porServico[a.servicoNome]||0) + (a.valorLiquidoProfissional||0); });
+        return `<h2>💰 Resumo financeiro</h2>
+        <div class="resumo-relatorio">
+            <div class="linha"><span>Realizados no mês</span><strong>${realMes.length}</strong></div>
+            <div class="linha"><span>Líquido no mês</span><strong>${formatarMoeda(somaLiq(realMes))}</strong></div>
+            <div class="linha destaque"><span>Total líquido geral (realizados)</span><strong>${formatarMoeda(somaLiq(realizados))}</strong></div>
+        </div>
+        <div class="card">${Object.entries(porServico).map(([s,v]) => `<div class="flex-row" style="justify-content:space-between;padding:6px 0"><span>${esc(s)}</span><strong>${formatarMoeda(v)}</strong></div>`).join('') || '<div class="empty-state">Nenhum atendimento realizado ainda</div>'}</div>
+        <p class="text-small">ℹ️ Somente atendimentos com status <strong>Realizado</strong> entram nestes valores. Agendados e cancelados não somam nada.</p>`;
+    }
+
+    // ========== RELATÓRIOS (corrigido) ==========
+    function renderRelatorios() {
+        return `<h2>📄 Relatórios</h2>
+        <div class="relatorio-filtros">
+            <label>Mês</label><input type="month" id="relMes" value="${hojeStr().slice(0,7)}">
+            <label>Serviço</label><select id="relServico"><option value="">Todos os serviços</option>${servicos.map(s=>`<option value="${esc(s.nome)}">${esc(s.nome)}</option>`).join('')}</select>
+            <label>Status</label><select id="relStatus"><option value="">Todos os status</option><option value="realizado">Realizados</option><option value="agendado">Agendados</option><option value="cancelado">Cancelados</option></select>
+            <button id="gerarRelatorioBtn" style="width:100%;margin-top:8px">Gerar relatório</button>
+        </div>
+        <div id="relatorioResultado" style="margin-top:16px"></div>
+        <button id="imprimirBtn" class="btn-outline" style="width:100%">🖨️ Imprimir / Salvar PDF</button>`;
+    }
+
+    function hookRelatorios() {
+        function gerar() {
+            const mes = document.getElementById('relMes').value;
+            const servF = document.getElementById('relServico').value;
+            const statF = document.getElementById('relStatus').value;
+            let filtrados = atendimentos.filter(a => a.data.startsWith(mes));
+            if (servF) filtrados = filtrados.filter(a => a.servicoNome === servF);
+            if (statF) filtrados = filtrados.filter(a => a.status === statF);
+            filtrados.sort((a,b) => a.data.localeCompare(b.data) || a.horario.localeCompare(b.horario));
+            const real = filtrados.filter(a => a.status === 'realizado');
+            const agen = filtrados.filter(a => a.status === 'agendado');
+            const canc = filtrados.filter(a => a.status === 'cancelado');
+            const totalBruto = real.reduce((s,a) => s + (a.valorTotal||0), 0);
+            const totalLiq = somaLiq(real);
+            const totalClinica = totalBruto - totalLiq;
+            const previsto = agen.reduce((s,a) => s + (a.valorLiquidoProfissional||0), 0);
+            let html = `<div id="relatorio-print-area">
+                <h3>Relatório de Atendimentos</h3>
+                <p class="text-small"><strong>Profissional:</strong> Dra. Alexsandra Souza · <strong>Período:</strong> ${mes.split('-').reverse().join('/')}${servF ? ' · ' + esc(servF) : ''}</p>
+                <div class="resumo-relatorio" style="margin-top:12px">
+                    <div class="linha"><span>✅ Realizados</span><strong>${real.length}</strong></div>
+                    <div class="linha"><span>📅 Agendados</span><strong>${agen.length}</strong></div>
+                    <div class="linha"><span>❌ Cancelados</span><strong>${canc.length}</strong></div>
+                    <div class="linha"><span>Faturamento bruto (realizados)</span><strong>${formatarMoeda(totalBruto)}</strong></div>
+                    <div class="linha"><span>Parte da clínica</span><strong>${formatarMoeda(totalClinica)}</strong></div>
+                    <div class="linha destaque"><span>💰 SEU LÍQUIDO (realizados)</span><strong>${formatarMoeda(totalLiq)}</strong></div>
+                </div>
+                ${previsto > 0 ? `<div class="aviso-previsto">⏳ Previsão de agendados (ainda não realizados, <strong>não incluída</strong> no líquido acima): <strong>${formatarMoeda(previsto)}</strong></div>` : ''}
+                <div class="tabela-scroll" style="margin-top:14px"><table>
+                <thead><tr><th>Data</th><th>Hora</th><th>Paciente</th><th>Serviço</th><th>Status</th><th>Valor</th><th>Seu líquido</th></tr></thead><tbody>`;
+            filtrados.forEach(a => {
+                const cancRow = a.status === 'cancelado';
+                html += `<tr>
+                    <td>${formatarDataBr(a.data)}</td><td>${esc(a.horario)}</td><td>${esc(a.pacienteNome)}</td><td>${esc(a.servicoNome)}</td>
+                    <td><span class="badge-status ${a.status==='realizado'?'status-realizado':cancRow?'status-cancelado':'status-agendado'}">${statusLabel(a.status)}</span></td>
+                    <td class="${cancRow?'valor-riscado':''}">${formatarMoeda(a.valorTotal)}</td>
+                    <td>${a.status === 'realizado' ? formatarMoeda(a.valorLiquidoProfissional) : '—'}</td>
+                </tr>`;
+            });
+            html += `<tr style="font-weight:bold;background:var(--cream)"><td colspan="6">TOTAL LÍQUIDO A RECEBER (só realizados)</td><td>${formatarMoeda(totalLiq)}</td></tr>`;
+            html += `</tbody></table></div></div>`;
+            document.getElementById('relatorioResultado').innerHTML = html;
+        }
+        document.getElementById('gerarRelatorioBtn').addEventListener('click', gerar);
+        document.getElementById('imprimirBtn').addEventListener('click', () => {
+            const c = document.getElementById('relatorioResultado').innerHTML;
+            if (!c || !c.includes('<table')) { alert('Gere o relatório primeiro.'); return; }
+            window.print();
+        });
+        gerar();
+    }
+
+    // ========== INIT ==========
+    tabs.forEach(tab => tab.addEventListener('click', () => irParaAba(tab.dataset.aba)));
+    salvarTudo();
+    render();
+
+    // ========== VISÃO COMPARTILHADA (somente leitura) ==========
+    function renderShareView(h) {
+        document.getElementById('tabBar')?.remove();
+        let payload = null;
+        try { payload = JSON.parse(decodeURIComponent(escape(atob(new URLSearchParams(h.split('?')[1] || '').get('d') || '')))); } catch(e) {}
+        const el = document.getElementById('mainContent');
+        if (!payload || !payload.itens) {
+            el.innerHTML = `<div id="shareView"><div class="share-header"><span class="marca">Pilates Gestão</span><h1>Agenda indisponível</h1><p>Este link está incompleto ou expirado. Peça um link novo à Dra. Alexsandra.</p></div></div>`;
+            return;
+        }
+        const dias = [];
+        const d0 = new Date(payload.de + 'T12:00:00'), d1 = new Date(payload.ate + 'T12:00:00');
+        const _isoLocal = d => `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+        const _brLocal = iso => iso.split('-').reverse().join('/');
+        const esc = s => String(s||'').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+        for (let d = new Date(d0); d <= d1; d.setDate(d.getDate()+1)) dias.push(_isoLocal(d));
+        const diasNome = ['Domingo','Segunda-feira','Terça-feira','Quarta-feira','Quinta-feira','Sexta-feira','Sábado'];
+        el.innerHTML = `<div id="shareView">
+            <div class="share-header"><span class="marca">Pilates Gestão · Somente leitura</span>
+                <h1>Agenda da semana</h1>
+                <p>${_brLocal(payload.de)} a ${_brLocal(payload.ate)} · Dra. Alexsandra Souza<br>Gerado em ${_brLocal(payload.gerado)}</p>
+            </div>
+            ${dias.map(ds => {
+                const dt = new Date(ds + 'T12:00:00');
+                const itens = payload.itens.filter(i => i.data === ds).sort((a,b)=>a.horario.localeCompare(b.horario));
+                return `<div class="dia-share">
+                    <div class="dia-titulo">${diasNome[dt.getDay()]} · ${_brLocal(ds)} <span class="qtd">${itens.length ? itens.length + ' atend.' : ''}</span></div>
+                    ${itens.length ? itens.map(i => `<div class="item"><span class="hora">${esc(i.horario)}</span><div><strong>${esc(i.paciente)}</strong><br><span class="text-small">${esc(i.servico)}</span></div></div>`).join('') : '<div class="vazio">Sem atendimentos</div>'}
+                </div>`;
+            }).join('')}
+            <div class="share-footer">Esta é uma visão somente leitura. Alterações na agenda exigem um novo link.</div>
+        </div>`;
+    }
+})();
 </script>
 </body>
 </html>
