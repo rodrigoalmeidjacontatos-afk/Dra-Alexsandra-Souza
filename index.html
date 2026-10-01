@@ -165,6 +165,7 @@
         <div class="tab-item" data-aba="servicos"><i>⚙️</i>Serviços</div>
         <div class="tab-item" data-aba="financeiro"><i>💰</i>Financeiro</div>
         <div class="tab-item" data-aba="relatorios"><i>📄</i>Relatórios</div>
+        <div class="tab-item" data-aba="backup"><i>☁️</i>Backup</div>
     </div>
 </div>
 
@@ -239,6 +240,7 @@
         else if (abaAtiva === 'servicos') html += renderServicos();
         else if (abaAtiva === 'financeiro') html += renderFinanceiro();
         else if (abaAtiva === 'relatorios') html += renderRelatorios();
+        else if (abaAtiva === 'backup') html += renderBackup();
         mainEl.innerHTML = html;
         tabs.forEach(t => t.classList.toggle('active', t.dataset.aba === abaAtiva));
         if (abaAtiva === 'dashboard') hookDashboard();
@@ -248,6 +250,7 @@
         else if (abaAtiva === 'pacientes') hookPacientes();
         else if (abaAtiva === 'servicos') hookServicos();
         else if (abaAtiva === 'relatorios') hookRelatorios();
+        else if (abaAtiva === 'backup') hookBackup();
     }
 
     // ========== DASHBOARD ==========
@@ -771,6 +774,88 @@
             window.print();
         });
         gerar();
+    }
+
+    // ========== BACKUP / RESTAURAÇÃO ==========
+    function montarBackup() {
+        return { versao: 2, geradoEm: hojeStr(), pacientes, servicos, atendimentos };
+    }
+
+    function renderBackup() {
+        const totalAtt = atendimentos.length;
+        return `<h2>☁️ Backup dos dados</h2>
+        <div class="card">
+            <h3>📤 Salvar backup</h3>
+            <p class="text-small" style="margin-bottom:10px">Baixa um arquivo com <strong>tudo</strong>: ${pacientes.length} pacientes, ${servicos.length} serviços e ${totalAtt} atendimentos. Guarde esse arquivo com carinho — ele é a sua garantia.</p>
+            <button id="btnBaixarBackup" style="width:100%">⬇️ Baixar arquivo de backup</button>
+            <button id="btnCopiarBackup" class="btn-outline" style="width:100%;margin-top:8px">📋 Copiar backup como texto (WhatsApp/e-mail)</button>
+            <p class="text-small" style="margin-top:8px">💡 Dica: no iPhone, o arquivo baixado fica em <strong>Arquivos → Downloads</strong>. O texto copiado pode ser enviado para você mesma no WhatsApp.</p>
+        </div>
+        <div class="card">
+            <h3>📥 Restaurar em outro aparelho</h3>
+            <p class="text-small" style="margin-bottom:10px">Abra o sistema no computador ou outro celular e carregue o backup aqui. <strong>Atenção:</strong> isso substitui os dados deste aparelho.</p>
+            <button id="btnRestaurarArquivo" style="width:100%">📂 Restaurar de arquivo</button>
+            <input type="file" id="inputRestaurar" accept=".json,application/json" style="display:none">
+            <label style="margin-top:10px">Ou cole o texto do backup:</label>
+            <textarea id="areaRestaurar" placeholder="Cole aqui o texto do backup..."></textarea>
+            <button id="btnRestaurarTexto" class="btn-outline" style="width:100%;margin-top:4px">Restaurar deste texto</button>
+            <div id="msgBackup" style="margin-top:10px"></div>
+        </div>
+        <p class="text-small">ℹ️ Os dados ficam salvos no navegador de cada aparelho. Para ter os mesmos dados no iPhone e no computador: faça o backup em um e restaure no outro.</p>`;
+    }
+
+    function hookBackup() {
+        document.getElementById('btnBaixarBackup').addEventListener('click', () => {
+            const blob = new Blob([JSON.stringify(montarBackup(), null, 2)], { type: 'application/json' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = `backup-pilates-${hojeStr()}.json`;
+            document.body.appendChild(a); a.click(); a.remove();
+        });
+        document.getElementById('btnCopiarBackup').addEventListener('click', () => {
+            const texto = JSON.stringify(montarBackup());
+            const btn = document.getElementById('btnCopiarBackup');
+            (navigator.clipboard ? navigator.clipboard.writeText(texto) : Promise.reject())
+                .then(() => { btn.innerText = '✅ Backup copiado!'; })
+                .catch(() => {
+                    const t = document.createElement('textarea'); t.value = texto; document.body.appendChild(t);
+                    t.select(); document.execCommand('copy'); t.remove(); btn.innerText = '✅ Backup copiado!';
+                });
+        });
+        document.getElementById('btnRestaurarArquivo').addEventListener('click', () => document.getElementById('inputRestaurar').click());
+        document.getElementById('inputRestaurar').addEventListener('change', e => {
+            const file = e.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = () => restaurarDeTexto(reader.result);
+            reader.readAsText(file);
+        });
+        document.getElementById('btnRestaurarTexto').addEventListener('click', () => {
+            const texto = document.getElementById('areaRestaurar').value.trim();
+            if (!texto) { alert('Cole o texto do backup primeiro.'); return; }
+            restaurarDeTexto(texto);
+        });
+        function restaurarDeTexto(texto) {
+            try {
+                const dados = JSON.parse(texto);
+                if (!Array.isArray(dados.atendimentos) || !Array.isArray(dados.pacientes)) throw new Error('formato inválido');
+                if (!confirm(`Restaurar backup de ${dados.geradoEm || 'data desconhecida'} com ${dados.atendimentos.length} atendimentos? Os dados atuais deste aparelho serão substituídos.`)) return;
+                pacientes = dados.pacientes;
+                if (Array.isArray(dados.servicos) && dados.servicos.length) servicos = dados.servicos;
+                atendimentos = dados.atendimentos;
+                atendimentos.forEach(a => {
+                    a.valorTotal = a.valorTotal || 0;
+                    a.porcentagemProfissional = a.porcentagemProfissional || 0;
+                    a.valorLiquidoProfissional = (a.valorTotal * a.porcentagemProfissional) / 100;
+                    a.valorLiquidoClinica = a.valorTotal - a.valorLiquidoProfissional;
+                });
+                salvarTudo();
+                document.getElementById('msgBackup').innerHTML = '<div class="aviso-previsto" style="background:var(--green-bg);color:var(--green)">✅ Backup restaurado com sucesso!</div>';
+                setTimeout(render, 800);
+            } catch (e) {
+                document.getElementById('msgBackup').innerHTML = '<div class="aviso-previsto" style="background:var(--red-bg);color:var(--red)">❌ Arquivo/texto inválido. Verifique se copiou o backup completo.</div>';
+            }
+        }
     }
 
     // ========== INIT ==========
